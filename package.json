@@ -31,6 +31,7 @@
   "dependencies": {
     "@my-better-t-app/env": "workspace:*",
     "dotenv": "catalog:",
+    "lucide": "^0.577.0",
     "zod": "catalog:"
   },
   "devDependencies": {

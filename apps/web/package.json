@@ -8,10 +8,13 @@
     "start": "next start"
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.43",
+    "@ai-sdk/openai": "^3.0.41",
     "@base-ui/react": "^1.0.0",
     "@my-better-t-app/auth": "workspace:*",
     "@my-better-t-app/env": "workspace:*",
     "@tanstack/react-form": "^1.28.0",
+    "ai": "^6.0.116",
     "babel-plugin-react-compiler": "^1.0.0",
     "better-auth": "catalog:",
     "class-variance-authority": "^0.7.1",
