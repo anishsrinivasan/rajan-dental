@@ -61,9 +61,6 @@ export function SmileMakeoverFlow() {
 
 	const handleGoogleVerify = () => {
 		setCurrentStep("verify-success");
-		setTimeout(() => {
-			setCurrentStep("style-selection");
-		}, 2000);
 	};
 
 	const handleStyleSelect = (styleId: string) => {
@@ -74,23 +71,6 @@ export function SmileMakeoverFlow() {
 		console.log("Booking consultation with style:", selectedStyle);
 	};
 
-	const canProceed = () => {
-		switch (currentStep) {
-			case "upload":
-				return false;
-			case "preview":
-				return selectedImage !== null;
-			case "verify":
-				return false;
-			case "verify-success":
-				return false;
-			case "style-selection":
-				return selectedStyle !== null;
-			default:
-				return false;
-		}
-	};
-
 	const handleNext = () => {
 		switch (currentStep) {
 			case "preview":
@@ -98,6 +78,12 @@ export function SmileMakeoverFlow() {
 				break;
 			case "style-selection":
 				handleBookConsultation();
+				break;
+			case "verify":
+				handleGoogleVerify();
+				break;
+			case "verify-success":
+				setCurrentStep("style-selection");
 				break;
 		}
 	};
@@ -111,15 +97,6 @@ export function SmileMakeoverFlow() {
 			default:
 				return "Next";
 		}
-	};
-
-	const handleReset = () => {
-		if (selectedImage) {
-			URL.revokeObjectURL(selectedImage);
-		}
-		setSelectedImage(null);
-		setSelectedStyle(null);
-		setCurrentStep("upload");
 	};
 
 	return (

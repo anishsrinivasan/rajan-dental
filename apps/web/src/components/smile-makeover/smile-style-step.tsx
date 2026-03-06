@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, Download } from "lucide-react";
+import { Loader2, Save, ArrowDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ImageComparisonSlider } from "./image-comparison-slider";
 import { Button } from "@/components/ui/button";
@@ -84,7 +84,7 @@ export function SmileStyleStep({
 			}
 
 			const data = await apiResponse.json();
-			
+
 			// Set the generated image
 			if (data.image) {
 				setGeneratedImage(data.image);
@@ -122,7 +122,7 @@ export function SmileStyleStep({
 		<div className={cn("flex flex-col gap-6", className)}>
 			{/* Image Comparison or Loading State */}
 			{isGenerating ? (
-				<div className="flex aspect-[4/3] w-full items-center justify-center rounded-2xl border-2 border-primary bg-muted">
+				<div className="flex aspect-[4/3] w-full items-center justify-center rounded-2xl bg-muted ">
 					<div className="flex flex-col items-center gap-3">
 						<Loader2 className="size-10 animate-spin text-primary" />
 						<p className="text-muted-foreground text-sm">
@@ -136,7 +136,7 @@ export function SmileStyleStep({
 					afterImage={generatedImage}
 				/>
 			) : (
-				<div className="flex aspect-[4/3] w-full items-center justify-center rounded-2xl border-2 border-dashed border-muted-foreground/30 bg-muted/30">
+				<div className="flex aspect-[4/3] w-full items-center justify-center rounded-2xl bg-muted/30 shadow-inner">
 					<p className="text-center text-muted-foreground text-sm">
 						Select a style below to see your enhanced smile
 					</p>
@@ -158,32 +158,32 @@ export function SmileStyleStep({
 						onClick={() => handleStyleSelect(style.id)}
 						disabled={isGenerating}
 						className={cn(
-							"w-full rounded-lg border-2 p-4 text-left transition-all disabled:opacity-50",
+							"w-full rounded-xl p-4 text-left shadow-sm transition-all disabled:opacity-50",
 							selectedStyle === style.id
-								? "border-primary bg-primary/5"
-								: "border-border hover:border-primary/50"
+								? "bg-primary/5 "
+								: "bg-background "
 						)}
 					>
 						<div className="flex items-center justify-between">
 							<div className="flex-1">
-								<h4 className="font-semibold text-foreground text-sm">
+								<h4 className="font-semibold text-foreground text-base">
 									{style.name}
 								</h4>
-								<p className="mt-1 text-muted-foreground text-xs">
+								<p className="mt-1 text-muted-foreground text-sm">
 									{style.description}
 								</p>
 							</div>
 							<div
 								className={cn(
-									"ml-3 flex size-5 items-center justify-center rounded-full border-2 transition-colors",
+									"ml-3 flex size-7 shrink-0 items-center justify-center rounded-full border-2 transition-all",
 									selectedStyle === style.id
-										? "border-primary bg-primary"
+										? "border-primary bg-primary scale-110"
 										: "border-muted-foreground/30"
 								)}
 							>
 								{selectedStyle === style.id && (
 									<svg
-										className="size-3 text-primary-foreground"
+										className="size-4 text-primary-foreground"
 										fill="none"
 										stroke="currentColor"
 										viewBox="0 0 24 24"
@@ -202,18 +202,17 @@ export function SmileStyleStep({
 				))}
 			</div>
 
-			{/* Download Button */}
-			{generatedImage && !isGenerating && (
-				<Button
-					onClick={handleDownload}
-					variant="outline"
-					size="lg"
-					className="w-full gap-2 rounded-full"
-				>
-					<Download className="size-4" />
-					Save Image
-				</Button>
-			)}
+			{/* Save Image Button */}
+			<button
+				onClick={handleDownload}
+				disabled={!generatedImage || isGenerating}
+				className={cn(
+					"flex w-full items-center justify-center gap-2 rounded-xl p-4t",
+				)}
+			>
+				<ArrowDown className="size-5" />
+				<span className="font-semibold text-sm">Save image</span>
+			</button>
 		</div>
 	);
 }

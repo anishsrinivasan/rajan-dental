@@ -111,9 +111,9 @@ export function ImagePreviewStep({
 
 			<Button
 				onClick={() => fileInputRef.current?.click()}
-				className="flex w-full items-center justify-center gap-2 rounded-full border-2 py-3 transition-colors border-primary "
+				className="flex w-62.5 items-center justify-center gap-2 rounded-full border-2 py-3 transition-colors border-primary "
 			>
-				<Pencil className="size-4 text-primary" />
+				<Pencil className="size-5 text-primary" />
 				<span className="font-semibold text-sm text-[#000000]">Change image</span>
 			</Button>
 

@@ -62,7 +62,7 @@ export function ImageComparisonSlider({
 		<div
 			ref={containerRef}
 			className={cn(
-				"relative aspect-[4/3] w-full select-none overflow-hidden rounded-2xl border-2 border-primary",
+				"relative aspect-4/3 w-full select-none overflow-hidden rounded-2xl border-2 border-primary",
 				className
 			)}
 			onMouseDown={handleMouseDown}
