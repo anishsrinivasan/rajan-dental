@@ -228,7 +228,7 @@ export function SmileStyleStep({
                   "ml-3 flex size-7 shrink-0 items-center justify-center rounded-full border-2 transition-all",
                   selectedStyle === style.id
                     ? "border-primary bg-primary scale-110"
-                    : "border-muted-foreground/30",
+                    : "border-primary",
                 )}
               >
                 {selectedStyle === style.id && (
@@ -257,14 +257,14 @@ export function SmileStyleStep({
         onClick={handleDownload}
         disabled={!selectedStyle || !generatedImages[selectedStyle]}
         className={cn(
-          "flex w-full items-center justify-center gap-2 rounded-xl bg-background p-4 shadow-sm transition-all",
+          "flex w-full items-center justify-center gap-2 rounded-xl p-4 ",
           selectedStyle && generatedImages[selectedStyle]
             ? "hover:shadow-md"
             : "cursor-not-allowed opacity-50",
         )}
       >
         <ArrowDown className="size-5" />
-        <span className="font-medium text-sm">Save image</span>
+        <span className="font-semibold text-sm">Save image</span>
       </button>
     </div>
   );
