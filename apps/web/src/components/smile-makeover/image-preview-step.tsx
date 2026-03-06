@@ -1,19 +1,19 @@
 "use client";
 
+import { Button } from "@base-ui/react/button";
+import { PencilLine, X, ZoomIn, ZoomOut } from "lucide-react";
 import Image from "next/image";
-import { X, ZoomIn, ZoomOut, Pencil } from "lucide-react";
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
-import { Button } from "@base-ui/react/button";
 
 interface ImagePreviewStepProps {
+  className?: string;
   imageUrl: string;
-  onRemove: () => void;
   onConfirm: () => void;
   onImageChange: (file: File) => void;
-  className?: string;
+  onRemove: () => void;
 }
 
 export function ImagePreviewStep({
@@ -40,10 +40,10 @@ export function ImagePreviewStep({
       <div className="relative w-full overflow-hidden rounded-2xl border-2 border-primary p-4">
         <div className="relative aspect-4/3 w-full overflow-hidden bg-muted">
           <Image
-            src={imageUrl}
             alt="Preview"
-            fill
             className="object-cover transition-transform duration-200"
+            fill
+            src={imageUrl}
             style={{ transform: `scale(${zoom / 100})` }}
           />
           {/* Grid Overlay */}
@@ -51,31 +51,31 @@ export function ImagePreviewStep({
             <svg className="size-full" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <pattern
-                  id="grid"
-                  width="20%"
                   height="20%"
+                  id="grid"
                   patternUnits="userSpaceOnUse"
+                  width="20%"
                 >
                   <path
                     d="M 100 0 L 0 0 0 100"
                     fill="none"
-                    stroke="white"
-                    strokeWidth="1"
-                    strokeDasharray="4,4"
                     opacity="0.9"
+                    stroke="white"
+                    strokeDasharray="4,4"
+                    strokeWidth="1"
                   />
                 </pattern>
               </defs>
-              <rect width="100%" height="100%" fill="url(#grid)" />
+              <rect fill="url(#grid)" height="100%" width="100%" />
             </svg>
           </div>
         </div>
 
         {/* Remove Button */}
         <Button
-          onClick={onRemove}
-          className="absolute top-3 right-3 flex size-8 items-center justify-center rounded-full bg-background shadow-lg transition-colors hover:bg-muted"
           aria-label="Remove image"
+          className="absolute top-3 right-3 flex size-8 items-center justify-center rounded-full bg-background shadow-lg transition-colors hover:bg-muted"
+          onClick={onRemove}
         >
           <X className="size-4" />
         </Button>
@@ -84,60 +84,60 @@ export function ImagePreviewStep({
       {/* Zoom Controls */}
       <div className="flex w-full items-center gap-3">
         <Button
-          onClick={() => setZoom(Math.max(50, zoom - 10))}
-          className="flex size-10 text-primary border-primary shrink-0 items-center justify-center rounded-full border-2 transition-colors"
           aria-label="Zoom out"
+          className="flex size-10 shrink-0 items-center justify-center border-primary text-primary transition-colors"
+          onClick={() => setZoom(Math.max(50, zoom - 10))}
         >
-          <ZoomOut className="size-5 text-primary" />
+          <ZoomOut className="size-9 text-primary" />
         </Button>
 
         <Slider
-          min={50}
+          className="flex-1"
           max={200}
+          min={50}
+          onValueChange={setZoom}
           step={5}
           value={zoom}
-          onValueChange={setZoom}
-          className="flex-1"
         />
 
         <Button
-          onClick={() => setZoom(Math.min(200, zoom + 10))}
-          className="flex size-10 text-primary border-primary shrink-0 items-center justify-center rounded-full border-2 transition-colors hover:border-primary hover:text-primary"
           aria-label="Zoom in"
+          className="flex size-10 shrink-0 items-center justify-center border-primary text-primary transition-colors"
+          onClick={() => setZoom(Math.min(200, zoom + 10))}
         >
-          <ZoomIn className="size-5 text-primary" />
+          <ZoomIn className="size-9 text-primary" />
         </Button>
       </div>
 
       <Button
+        className="flex w-62.5 items-center justify-center gap-2 rounded-full border border-primary py-3 transition-colors"
         onClick={() => fileInputRef.current?.click()}
-        className="flex w-62.5 items-center justify-center gap-2 rounded-full border-2 py-3 transition-colors border-primary "
       >
-        <Pencil className="size-5 text-primary" />
-        <span className="font-semibold text-sm text-[#000000]">
+        <PencilLine className="size-5 text-primary" />
+        <span className="font-semibold text-[#000000] text-sm">
           Change image
         </span>
       </Button>
 
       <input
-        ref={fileInputRef}
-        type="file"
         accept="image/*"
         className="hidden"
         onChange={handleFileSelect}
+        ref={fileInputRef}
+        type="file"
       />
 
       <div className="w-full rounded-lg p-4">
         <div className="flex items-start gap-3">
           <Checkbox
-            id="consent"
             checked={isChecked}
+            className="mt-0.5 rounded-lg p-3"
+            id="consent"
             onCheckedChange={(checked) => setIsChecked(checked === true)}
-            className="mt-0.5"
           />
           <label
+            className="cursor-pointer text-muted-foreground text-xs italic leading-relaxed"
             htmlFor="consent"
-            className="cursor-pointer italic text-muted-foreground text-xs leading-relaxed"
           >
             I confirm that I have the necessary rights and permissions to upload
             this image and that it does not contain unauthorized personal or

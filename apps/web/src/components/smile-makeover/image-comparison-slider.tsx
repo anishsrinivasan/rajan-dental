@@ -1,13 +1,13 @@
 "use client";
 
-import Image from "next/image";
-import { useState, useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface ImageComparisonSliderProps {
-  beforeImage: string;
   afterImage: string;
+  beforeImage: string;
   className?: string;
 }
 
@@ -21,7 +21,9 @@ export function ImageComparisonSlider({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleMove = (clientX: number) => {
-    if (!containerRef.current) return;
+    if (!containerRef.current) {
+      return;
+    }
 
     const rect = containerRef.current.getBoundingClientRect();
     const x = clientX - rect.left;
@@ -33,12 +35,16 @@ export function ImageComparisonSlider({
   const handleMouseUp = () => setIsDragging(false);
 
   const handleMouseMove = (e: MouseEvent) => {
-    if (!isDragging) return;
+    if (!isDragging) {
+      return;
+    }
     handleMove(e.clientX);
   };
 
   const handleTouchMove = (e: TouchEvent) => {
-    if (!isDragging) return;
+    if (!isDragging) {
+      return;
+    }
     handleMove(e.touches[0].clientX);
   };
 
@@ -60,22 +66,22 @@ export function ImageComparisonSlider({
 
   return (
     <div
-      ref={containerRef}
       className={cn(
         "relative aspect-4/3 w-full select-none overflow-hidden rounded-2xl border-2 border-primary",
         className,
       )}
       onMouseDown={handleMouseDown}
       onTouchStart={handleMouseDown}
+      ref={containerRef}
     >
       {/* Before Image (Left) */}
       <div className="absolute inset-0">
         <Image
-          src={beforeImage}
           alt="Before"
-          fill
           className="object-cover"
+          fill
           priority
+          src={beforeImage}
         />
         <div className="absolute top-4 left-4 rounded-full bg-background/90 px-3 py-1.5 font-medium text-foreground text-xs backdrop-blur-sm">
           BEFORE
@@ -88,11 +94,11 @@ export function ImageComparisonSlider({
         style={{ clipPath: `inset(0 0 0 ${sliderPosition}%)` }}
       >
         <Image
-          src={afterImage}
           alt="After"
-          fill
           className="object-cover"
+          fill
           priority
+          src={afterImage}
         />
         <div className="absolute top-4 right-4 rounded-full bg-primary/90 px-3 py-1.5 font-medium text-primary-foreground text-xs backdrop-blur-sm">
           AFTER
@@ -108,7 +114,7 @@ export function ImageComparisonSlider({
         <div className="h-full w-full bg-white shadow-lg" />
 
         {/* Handle Button */}
-        <div className="absolute left-1/2 top-1/2 flex size-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-primary shadow-lg">
+        <div className="absolute top-1/2 left-1/2 flex size-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-primary shadow-lg">
           <ChevronLeft className="absolute left-1 size-4 text-primary-foreground" />
           <ChevronRight className="absolute right-1 size-4 text-primary-foreground" />
         </div>

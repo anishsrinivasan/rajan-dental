@@ -207,10 +207,10 @@ export function SmileStyleStep({
             onClick={() => handleStyleSelect(style.id)}
             disabled={!generatedImages[style.id]}
             className={cn(
-              "w-full rounded-xl p-4 text-left shadow-sm transition-all",
+              "w-full rounded-xl p-4 text-left transition-all",
               selectedStyle === style.id
-                ? "bg-primary/5 shadow-md"
-                : "bg-background shadow-sm hover:shadow-md",
+                ? "bg-primary/10 border-primary border"
+                : "bg-background",
               !generatedImages[style.id] && "cursor-not-allowed opacity-50",
             )}
           >
@@ -257,14 +257,11 @@ export function SmileStyleStep({
         onClick={handleDownload}
         disabled={!selectedStyle || !generatedImages[selectedStyle]}
         className={cn(
-          "flex w-full items-center justify-center gap-2 rounded-xl p-4 ",
-          selectedStyle && generatedImages[selectedStyle]
-            ? "hover:shadow-md"
-            : "cursor-not-allowed opacity-50",
+          "flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl p-4 ",
         )}
       >
         <ArrowDown className="size-5" />
-        <span className="font-semibold text-sm">Save image</span>
+        <span className="font-bold text-sm">Save image</span>
       </button>
     </div>
   );

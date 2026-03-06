@@ -8,7 +8,7 @@ import { ImagePreviewStep } from "./image-preview-step";
 import { VerificationStep } from "./verification-step";
 import { VerificationSuccessStep } from "./verification-success-step";
 import { SmileStyleStep } from "./smile-style-step";
-import { MoveRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import logo from "../../assets/Logo.png";
 
@@ -108,11 +108,11 @@ export function SmileMakeoverFlow() {
             <Image src={logo} alt="logo" />
           </div>
           <div className="mt-8 text-center">
-            <div className="relative ">
+            <div className="relative">
               <h1 className="text-[40px] text-primary font-medium">
                 Smile On!
               </h1>
-              <p className="mt-1 text-[40px] text-[#0D0D0D] font-medium">
+              <p className="text-[40px] text-[#0D0D0D] font-medium">
                 AI Smile Makeover
               </p>
             </div>
@@ -149,17 +149,17 @@ export function SmileMakeoverFlow() {
           <StepIndicator
             currentStep={currentStepIndex}
             totalSteps={steps.length}
-            className="mb-6"
+            className="mb-12"
           />
 
-          <div className="mt-24">
+          <div className="mt-16">
             <Button
               onClick={handleNext}
               size="lg"
-              className="w-full rounded-full cursor-pointer font-semibold text-[16px] "
+              className="w-full bg-[#EA541F] rounded-full cursor-pointer font-semibold text-[16px] "
             >
               {getButtonText()}
-              <MoveRight />
+              <ArrowRight />
             </Button>
           </div>
         </div>

@@ -21,8 +21,8 @@ export function StepIndicator({
             index === currentStep
               ? "w-2.5 bg-primary"
               : index < currentStep
-                ? "w-2.5 bg-primary/60"
-                : "w-2.5 bg-muted-foreground/30",
+                ? "w-2.5 bg-primary"
+                : "w-2.5 bg-primary/30",
           )}
         />
       ))}

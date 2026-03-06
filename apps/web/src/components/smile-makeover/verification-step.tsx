@@ -3,8 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import googleLogo from "../../assets/Google Logo.png";
-import { ArrowRightToLine } from "lucide-react";
+import googleLogo from "../../assets/google-logo.png";
+import verifyLogo from "../../assets/verify.png";
 
 interface VerificationStepProps {
   onGoogleVerify: () => void;
@@ -16,9 +16,9 @@ export function VerificationStep({
   className,
 }: VerificationStepProps) {
   return (
-    <div className={cn("flex flex-col items-center gap-6", className)}>
-      <div className="flex size-20 items-center justify-center rounded-full">
-        <ArrowRightToLine className="size-6 text-primary" />
+    <div className={cn("flex mt-16 flex-col items-center gap-6", className)}>
+      <div className="flex items-center justify-center rounded-full">
+        <Image src={verifyLogo} alt="" />
       </div>
 
       <div className="text-center">

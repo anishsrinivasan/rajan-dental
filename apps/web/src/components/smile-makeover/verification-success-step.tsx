@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import frameLogo from "../../assets/Frame (1).png";
+import successLogo from "../../assets/success.png";
 
 interface VerificationSuccessStepProps {
   className?: string;
@@ -12,9 +12,9 @@ export function VerificationSuccessStep({
   className,
 }: VerificationSuccessStepProps) {
   return (
-    <div className={cn("flex flex-col items-center py-17.5 gap-2", className)}>
+    <div className={cn("flex flex-col items-center py-24 gap-2", className)}>
       <div className="flex size-20 items-center justify-center ">
-        <Image src={frameLogo} alt="Success" />
+        <Image src={successLogo} alt="Success" />
       </div>
       <div className="text-center">
         <h3 className="font-semibold text-foreground text-lg">
