@@ -100,14 +100,14 @@ export function SmileMakeoverFlow() {
   };
 
   return (
-    <div className="flex min-h-full flex-col bg-background ">
+    <div className="flex h-screen flex-col bg-background ">
       {/* Main Content */}
       <main className="flex flex-1 flex-col ">
-        <div className="mx-auto w-full max-w-md flex-1 px-4 py-6">
+        <div className="mx-auto w-full max-w-md flex-1 px-4 pt-6">
           <div>
             <Image src={logo} alt="logo" />
           </div>
-          <div className="mt-8 text-center">
+          <div className="mt-6 text-center">
             <div className="relative">
               <h1 className="text-[40px] text-primary font-medium">
                 Smile On!
@@ -146,13 +146,13 @@ export function SmileMakeoverFlow() {
             )}
           </div>
 
-          <StepIndicator
-            currentStep={currentStepIndex}
-            totalSteps={steps.length}
-            className="mb-12"
-          />
-
-          <div className="mt-16">
+          <div
+            className={`flex flex-col gap-y-4 ${currentStep === "preview" ? "mt-0" : "mt-23"}`}
+          >
+            <StepIndicator
+              currentStep={currentStepIndex}
+              totalSteps={steps.length}
+            />
             <Button
               onClick={handleNext}
               size="lg"
