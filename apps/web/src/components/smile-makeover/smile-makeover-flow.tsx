@@ -156,7 +156,7 @@ export function SmileMakeoverFlow() {
             <Button
               onClick={handleNext}
               size="lg"
-              className="w-full bg-[#EA541F] rounded-full cursor-pointer font-semibold text-[16px] "
+              className="w-full bg-primary rounded-full cursor-pointer font-semibold text-[16px] "
             >
               {getButtonText()}
               <ArrowRight />
