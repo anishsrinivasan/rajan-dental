@@ -38,10 +38,10 @@ export function ImagePreviewStep({
     <div className={cn("flex flex-col items-center gap-4 ", className)}>
       {/* Image Preview with Grid Overlay */}
       <div className="relative w-full overflow-hidden rounded-2xl border-2 border-primary p-4">
-        <div className="relative aspect-4/2 w-full overflow-hidden bg-muted">
+        <div className="relative aspect-4/2 w-full overflow-hidden">
           <Image
             alt="Preview"
-            className="object-cover transition-transform duration-200"
+            className="object-cover transition-transform duration-200 border border-primary rounded-lg"
             fill
             src={imageUrl}
             style={{ transform: `scale(${zoom / 100})` }}
@@ -92,7 +92,7 @@ export function ImagePreviewStep({
         </Button>
 
         <Slider
-          className="flex-1"
+          className="flex-1 bg-[#E6E6E6]"
           max={200}
           min={50}
           onValueChange={setZoom}

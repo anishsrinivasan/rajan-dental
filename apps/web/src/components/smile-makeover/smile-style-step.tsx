@@ -139,7 +139,7 @@ export function SmileStyleStep({
   if (isGenerating) {
     return (
       <div className={cn("flex flex-col gap-6", className)}>
-        <div className="flex min-h-100 w-full flex-col items-center justify-center rounded-2xl bg-muted shadow-inner p-8">
+        <div className="flex min-h-100 w-full flex-col items-center justify-center rounded-2xl bg-muted shadow-inner p-6 border-2 border-red-500">
           <div className="flex flex-col items-center gap-4">
             <Loader2 className="size-12 animate-spin text-primary" />
             <div className="text-center">
@@ -171,7 +171,7 @@ export function SmileStyleStep({
   const currentImage = selectedStyle ? generatedImages[selectedStyle] : null;
 
   return (
-    <div className={cn("flex flex-col gap-6", className)}>
+    <div className={cn("flex flex-col gap-2 ", className)}>
       {/* Image Comparison */}
       {currentImage ? (
         <ImageComparisonSlider
@@ -179,7 +179,7 @@ export function SmileStyleStep({
           afterImage={currentImage}
         />
       ) : (
-        <div className="flex aspect-4/3 w-full items-center justify-center rounded-2xl bg-muted/30 shadow-inner">
+        <div className="flex aspect-4/2 w-full items-center justify-center rounded-2xl bg-muted/30 shadow-inner">
           <p className="text-center text-muted-foreground text-sm">
             Select a style below to see your enhanced smile
           </p>

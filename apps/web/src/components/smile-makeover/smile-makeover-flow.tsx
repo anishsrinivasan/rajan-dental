@@ -143,7 +143,7 @@ export function SmileMakeoverFlow() {
           </div>
 
           <div
-            className={`flex flex-col gap-y-4 ${currentStep === "preview" ? "mt-0" : "mt-26"}`}
+            className={`flex flex-col gap-y-4 ${currentStep === "preview" || currentStep === "style-selection" ? "mt-0" : "mt-26"}`}
           >
             <StepIndicator
               currentStep={currentStepIndex}
