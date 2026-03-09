@@ -8,28 +8,28 @@ export const SMILE_STYLES = [
     id: "natural-warmth",
     name: "Natural Warmth",
     prompt:
-      "Please do not adds a new face in result when i input teeth only image Edit this image to create a natural, warm smile with visible teeth. IMPORTANT: Fix any broken, missing, or crooked teeth to show a full, healthy, realistic set of teeth. Do not make them overly white, keep them natural looking. Maintain facial structure and lighting.",
+      "Please do not adds a new face in result. when i input teeth image use that image only edit this image to create a natural, warm smile with visible teeth. IMPORTANT: Fix any broken, missing, or crooked teeth to show a full, healthy, realistic set of teeth. Do not make them overly white, keep them natural looking. Maintain facial structure and lighting.",
     description: "A subtle, friendly enhancement.",
   },
   {
     id: "hollywood-bright",
     name: "Hollywood Bright",
     prompt:
-      "Please do not adds a new face in result when i input teeth only image Edit this image to create a perfect, bright, wide Hollywood smile. IMPORTANT: Completely reconstruct the teeth to be straight, white, and flawless. Fix any missing teeth or gaps. Ensure the expression reaches the eyes. Maintain high realism.",
+      "Please do not adds a new face in result. when i input teeth image use that image only edit this image to create a perfect, bright, wide Hollywood smile. IMPORTANT: Completely reconstruct the teeth to be straight, white, and flawless. Fix any missing teeth or gaps. Ensure the expression reaches the eyes. Maintain high realism.",
     description: "Camera-ready perfection.",
   },
   {
     id: "confident-professional",
     name: "Confident Professional",
     prompt:
-      "Please do not adds a new face in result when i input teeth only image Edit this image to create a confident, assured smile with visible teeth. IMPORTANT: Ensure a full set of straight, unbroken teeth is visible. Repair any dental imperfections or missing teeth. The expression should be controlled and professional.",
+      "Please do not adds a new face in result. when i input teeth image use that image only edit this image to create a confident, assured smile with visible teeth. IMPORTANT: Ensure a full set of straight, unbroken teeth is visible. Repair any dental imperfections or missing teeth. The expression should be controlled and professional.",
     description: "Assured and trustworthy.",
   },
   {
     id: "radiant-joy",
     name: "Radiant Joy",
     prompt:
-      "Please do not adds a new face in result when i input teeth only image Edit this image to create a very happy, laughing smile. IMPORTANT: Show a complete, healthy set of teeth with no gaps or damage. Fix any broken teeth. The expression should be candid and joyful. Maintain the person's identity.",
+      "Please do not adds a new face in result. when i input teeth image use that image only edit this image to create a very happy, laughing smile. IMPORTANT: Show a complete, healthy set of teeth with no gaps or damage. Fix any broken teeth. The expression should be candid and joyful. Maintain the person's identity.",
     description: "Full of life and happiness.",
   },
 ];

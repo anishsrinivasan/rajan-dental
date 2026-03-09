@@ -100,25 +100,27 @@ export function SmileMakeoverFlow() {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-background ">
+    <div className="flex h-screen flex-col bg-background overflow-y-auto">
       {/* Main Content */}
       <main className="flex flex-1 flex-col">
-        <div className="mx-auto w-full max-w-md flex-1 px-4 pt-8">
-          <div>
-            <Image src={logo} alt="logo" />
-          </div>
-          <div className="mt-6 text-center">
-            <div className="relative">
-              <h1 className="text-[40px] text-primary font-medium">
+        <div className="mx-auto w-full max-w-md flex flex-col min-h-screen">
+          {/* Header */}
+          <div className="px-4 pt-4 pb-2 shrink-0">
+            <div className="mb-3">
+              <Image src={logo} alt="logo" className="h-8 w-auto" />
+            </div>
+            <div className="text-center">
+              <h1 className="text-3xl text-primary font-medium leading-tight">
                 Smile On!
               </h1>
-              <p className="text-[40px] text-[#0D0D0D] font-medium">
+              <p className="text-3xl text-[#0D0D0D] font-medium leading-tight">
                 AI Smile Makeover
               </p>
             </div>
           </div>
 
-          <div className="mb-6 flex-1 ">
+          {/* Component Area */}
+          <div className="flex-1 px-4 py-4">
             {currentStep === "upload" && (
               <ImageUploadStep onImageSelect={handleImageSelect} />
             )}
@@ -142,21 +144,23 @@ export function SmileMakeoverFlow() {
             )}
           </div>
 
-          <div
-            className={`flex flex-col gap-y-4 ${currentStep === "preview" || currentStep === "style-selection" ? "mt-0" : "mt-26"}`}
-          >
-            <StepIndicator
-              currentStep={currentStepIndex}
-              totalSteps={steps.length}
-            />
-            <Button
-              onClick={handleNext}
-              size="lg"
-              className="w-full bg-primary rounded-full cursor-pointer font-semibold text-[16px] "
-            >
-              {getButtonText()}
-              <ArrowRight />
-            </Button>
+          {/* Fixed Bottom Section */}
+          <div className="sticky bottom-0 bg-background px-4 py-4 shrink-0">
+            <div className="flex flex-col gap-y-4">
+              <StepIndicator
+                currentStep={currentStepIndex}
+                totalSteps={steps.length}
+              />
+              <Button
+                onClick={handleNext}
+                size="lg"
+                className="w-full bg-primary rounded-full cursor-pointer font-semibold text-[16px]"
+                disabled={currentStep === "upload" && !selectedImage}
+              >
+                {getButtonText()}
+                <ArrowRight />
+              </Button>
+            </div>
           </div>
         </div>
       </main>
