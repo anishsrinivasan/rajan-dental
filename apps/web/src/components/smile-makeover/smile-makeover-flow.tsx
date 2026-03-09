@@ -120,28 +120,30 @@ export function SmileMakeoverFlow() {
           </div>
 
           {/* Component Area */}
-          <div className="flex-1 px-4 py-4">
-            {currentStep === "upload" && (
-              <ImageUploadStep onImageSelect={handleImageSelect} />
-            )}
-            {currentStep === "preview" && selectedImage && (
-              <ImagePreviewStep
-                imageUrl={selectedImage}
-                onRemove={handleImageRemove}
-                onConfirm={handleImageConfirm}
-                onImageChange={handleImageChange}
-              />
-            )}
-            {currentStep === "verify" && (
-              <VerificationStep onGoogleVerify={handleGoogleVerify} />
-            )}
-            {currentStep === "verify-success" && <VerificationSuccessStep />}
-            {currentStep === "style-selection" && selectedImage && (
-              <SmileStyleStep
-                imageUrl={selectedImage}
-                onStyleSelect={handleStyleSelect}
-              />
-            )}
+          <div className="flex-1 px-4 py-4 flex items-center justify-center">
+            <div className="w-full">
+              {currentStep === "upload" && (
+                <ImageUploadStep onImageSelect={handleImageSelect} />
+              )}
+              {currentStep === "preview" && selectedImage && (
+                <ImagePreviewStep
+                  imageUrl={selectedImage}
+                  onRemove={handleImageRemove}
+                  onConfirm={handleImageConfirm}
+                  onImageChange={handleImageChange}
+                />
+              )}
+              {currentStep === "verify" && (
+                <VerificationStep onGoogleVerify={handleGoogleVerify} />
+              )}
+              {currentStep === "verify-success" && <VerificationSuccessStep />}
+              {currentStep === "style-selection" && selectedImage && (
+                <SmileStyleStep
+                  imageUrl={selectedImage}
+                  onStyleSelect={handleStyleSelect}
+                />
+              )}
+            </div>
           </div>
 
           {/* Fixed Bottom Section */}

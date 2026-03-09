@@ -45,7 +45,7 @@ export function SmileStyleStep({
   onStyleSelect,
   className,
 }: SmileStyleStepProps) {
-  const [selectedStyle, setSelectedStyle] = useState<string | null>(null);
+  const [selectedStyle, setSelectedStyle] = useState<string | null>("natural-warmth");
   const [generatedImages, setGeneratedImages] = useState<
     Record<string, string>
   >({});
@@ -53,17 +53,22 @@ export function SmileStyleStep({
   const [generationProgress, setGenerationProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
-  // Generate all 4 images on mount
   useEffect(() => {
     generateAllImages();
   }, [imageUrl]);
 
+  useEffect(() => {
+    if (!isGenerating && generatedImages["natural-warmth"]) {
+      onStyleSelect("natural-warmth");
+    }
+  }, [isGenerating, generatedImages]);
+
   const generateAllImages = async () => {
     setIsGenerating(true);
     setError(null);
+    setGenerationProgress(0);
 
     try {
-      // Convert image URL to base64 once
       const response = await fetch(imageUrl);
       const blob = await response.blob();
       const base64 = await new Promise<string>((resolve) => {
@@ -71,6 +76,17 @@ export function SmileStyleStep({
         reader.onloadend = () => resolve(reader.result as string);
         reader.readAsDataURL(blob);
       });
+
+      const progressInterval = setInterval(() => {
+        setGenerationProgress((prev) => {
+          if (prev >= 85) {
+            clearInterval(progressInterval);
+            return 85;
+          }
+          const increment = Math.floor(Math.random() * 4) + 2;
+          return Math.min(prev + increment, 85);
+        });
+      }, 300);
 
       // Single API call to generate all 4 styles
       const apiResponse = await fetch("/api/generate-smile", {
@@ -84,6 +100,8 @@ export function SmileStyleStep({
         }),
       });
 
+      clearInterval(progressInterval);
+
       if (!apiResponse.ok) {
         throw new Error("Failed to generate enhanced smiles");
       }
@@ -91,10 +109,10 @@ export function SmileStyleStep({
       const data = await apiResponse.json();
 
       if (data.images) {
+        setGenerationProgress(95);
+        setTimeout(() => setGenerationProgress(100), 200);
+        
         setGeneratedImages(data.images);
-
-        // Update progress to 100%
-        setGenerationProgress(100);
 
         if (data.errors && data.errors.length > 0) {
           console.warn("Some images failed to generate:", data.errors);
@@ -179,9 +197,9 @@ export function SmileStyleStep({
           afterImage={currentImage}
         />
       ) : (
-        <div className="flex aspect-4/2 w-full items-center justify-center rounded-2xl bg-muted/30 shadow-inner">
+        <div className="flex aspect-video w-full items-center justify-center rounded-2xl bg-muted/30 shadow-inner">
           <p className="text-center text-muted-foreground text-sm">
-            Select a style below to see your enhanced smile
+            Loading your enhanced smile...
           </p>
         </div>
       )}
