@@ -61,7 +61,6 @@ export function SmileStyleStep({
   const generateAllImages = async () => {
     setIsGenerating(true);
     setError(null);
-    const images: Record<string, string> = {};
 
     try {
       // Convert image URL to base64 once
@@ -73,41 +72,36 @@ export function SmileStyleStep({
         reader.readAsDataURL(blob);
       });
 
-      // Generate all 4 styles
-      for (let i = 0; i < smileStyles.length; i++) {
-        const style = smileStyles[i];
+      // Single API call to generate all 4 styles
+      const apiResponse = await fetch("/api/generate-smile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          imageBase64: base64,
+          generateAll: true,
+        }),
+      });
 
-        try {
-          const apiResponse = await fetch("/api/generate-smile", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              imageBase64: base64,
-              style: style.id,
-            }),
-          });
-
-          if (!apiResponse.ok) {
-            throw new Error(`Failed to generate ${style.name}`);
-          }
-
-          const data = await apiResponse.json();
-
-          if (data.image) {
-            images[style.id] = data.image;
-          }
-
-          // Update progress
-          setGenerationProgress(((i + 1) / smileStyles.length) * 100);
-        } catch (err) {
-          console.error(`Error generating ${style.name}:`, err);
-          // Continue with other styles even if one fails
-        }
+      if (!apiResponse.ok) {
+        throw new Error("Failed to generate enhanced smiles");
       }
 
-      setGeneratedImages(images);
+      const data = await apiResponse.json();
+
+      if (data.images) {
+        setGeneratedImages(data.images);
+
+        // Update progress to 100%
+        setGenerationProgress(100);
+
+        if (data.errors && data.errors.length > 0) {
+          console.warn("Some images failed to generate:", data.errors);
+        }
+      } else {
+        throw new Error("No images returned from API");
+      }
     } catch (err) {
       console.error("Error generating images:", err);
       setError("Failed to generate enhanced smiles. Please try again.");
