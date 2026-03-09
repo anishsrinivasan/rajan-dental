@@ -12,7 +12,7 @@ export function VerificationSuccessStep({
   className,
 }: VerificationSuccessStepProps) {
   return (
-    <div className={cn("flex flex-col items-center py-24 gap-2", className)}>
+    <div className={cn("flex flex-col items-center py-26 gap-2", className)}>
       <div className="flex size-20 items-center justify-center ">
         <Image src={successLogo} alt="Success" />
       </div>

@@ -16,7 +16,9 @@ export function VerificationStep({
   className,
 }: VerificationStepProps) {
   return (
-    <div className={cn("flex mt-16 flex-col items-center gap-6", className)}>
+    <div
+      className={cn("flex mt-16 flex-col items-center gap-8 py-2", className)}
+    >
       <div className="flex items-center justify-center rounded-full">
         <Image src={verifyLogo} alt="" />
       </div>

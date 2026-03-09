@@ -136,7 +136,7 @@ export function ImagePreviewStep({
             onCheckedChange={(checked) => setIsChecked(checked === true)}
           />
           <label
-            className="cursor-pointer text-muted-foreground text-xs italic leading-relaxed"
+            className="cursor-pointer text-muted-foreground text-[10px] italic leading-relaxed"
             htmlFor="consent"
           >
             I confirm that I have the necessary rights and permissions to upload

@@ -102,8 +102,8 @@ export function SmileMakeoverFlow() {
   return (
     <div className="flex h-screen flex-col bg-background ">
       {/* Main Content */}
-      <main className="flex flex-1 flex-col ">
-        <div className="mx-auto w-full max-w-md flex-1 px-4 pt-6">
+      <main className="flex flex-1 flex-col">
+        <div className="mx-auto w-full max-w-md flex-1 px-4 pt-8">
           <div>
             <Image src={logo} alt="logo" />
           </div>
@@ -118,11 +118,10 @@ export function SmileMakeoverFlow() {
             </div>
           </div>
 
-          <div className="mb-6 flex-1">
+          <div className="mb-6 flex-1 ">
             {currentStep === "upload" && (
               <ImageUploadStep onImageSelect={handleImageSelect} />
             )}
-
             {currentStep === "preview" && selectedImage && (
               <ImagePreviewStep
                 imageUrl={selectedImage}
@@ -131,13 +130,10 @@ export function SmileMakeoverFlow() {
                 onImageChange={handleImageChange}
               />
             )}
-
             {currentStep === "verify" && (
               <VerificationStep onGoogleVerify={handleGoogleVerify} />
             )}
-
             {currentStep === "verify-success" && <VerificationSuccessStep />}
-
             {currentStep === "style-selection" && selectedImage && (
               <SmileStyleStep
                 imageUrl={selectedImage}
@@ -147,7 +143,7 @@ export function SmileMakeoverFlow() {
           </div>
 
           <div
-            className={`flex flex-col gap-y-4 ${currentStep === "preview" ? "mt-0" : "mt-23"}`}
+            className={`flex flex-col gap-y-4 ${currentStep === "preview" ? "mt-0" : "mt-26"}`}
           >
             <StepIndicator
               currentStep={currentStepIndex}
