@@ -38,7 +38,7 @@ export function ImagePreviewStep({
     <div className={cn("flex flex-col items-center gap-4 ", className)}>
       {/* Image Preview with Grid Overlay */}
       <div className="relative w-full overflow-hidden rounded-2xl border-2 border-primary p-4">
-        <div className="relative aspect-4/2 w-full overflow-hidden">
+        <div className="relative aspect-square w-full overflow-hidden">
           <Image
             alt="Preview"
             className="object-cover transition-transform duration-200 border border-primary rounded-lg"

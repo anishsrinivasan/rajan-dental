@@ -197,7 +197,7 @@ export function SmileStyleStep({
           afterImage={currentImage}
         />
       ) : (
-        <div className="flex aspect-video w-full items-center justify-center rounded-2xl bg-muted/30 shadow-inner">
+        <div className="flex aspect-square w-full items-center justify-center rounded-2xl bg-muted/30 shadow-inner">
           <p className="text-center text-muted-foreground text-sm">
             Loading your enhanced smile...
           </p>
