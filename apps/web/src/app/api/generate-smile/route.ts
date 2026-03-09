@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateText } from "ai";
+import { GoogleGenAI } from "@google/genai";
 
-const MODEL_NAME = "google/gemini-2.5-flash-image";
+const MODEL_NAME = "gemini-2.5-flash-image";
 
 export const SMILE_STYLES = [
   {
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const apiKey = process.env.AI_GATEWAY_API_KEY;
+    const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
       return NextResponse.json(
         { error: "API key not configured" },
@@ -53,48 +53,63 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const base64Data = imageBase64.includes(",")
-      ? imageBase64.split(",")[1]
-      : imageBase64;
+    const ai = new GoogleGenAI({ apiKey });
+    const cleanBase64 = imageBase64.replace(
+      /^data:image\/(png|jpeg|jpg|webp);base64,/,
+      "",
+    );
 
     if (generateAll) {
+      const promises = SMILE_STYLES.map(async (styleConfig) => {
+        try {
+          const response = await ai.models.generateContent({
+            model: MODEL_NAME,
+            contents: {
+              parts: [
+                {
+                  inlineData: {
+                    mimeType: "image/jpeg",
+                    data: cleanBase64,
+                  },
+                },
+                {
+                  text: styleConfig.prompt,
+                },
+              ],
+            },
+          });
+
+          for (const part of response.candidates?.[0]?.content?.parts || []) {
+            if (part.inlineData) {
+              return {
+                id: styleConfig.id,
+                image: `data:image/png;base64,${part.inlineData.data}`,
+              };
+            }
+          }
+
+          throw new Error(`No image generated for ${styleConfig.name}`);
+        } catch (error) {
+          console.error(`Error generating ${styleConfig.name}:`, error);
+          return {
+            id: styleConfig.id,
+            image: null,
+            error: String(error),
+          };
+        }
+      });
+
+      const results = await Promise.all(promises);
       const allImages: Record<string, string> = {};
       const errors: string[] = [];
 
-      for (const styleConfig of SMILE_STYLES) {
-        try {
-          const result = await generateText({
-            model: MODEL_NAME,
-            prompt: styleConfig.prompt,
-            providerOptions: {
-              google: {
-                referenceImages: [
-                  {
-                    bytesBase64Encoded: base64Data,
-                  },
-                ],
-              },
-            },
-          } as any);
-
-          if (result.text) {
-            console.log(`${styleConfig.name} response:`, result.text);
-          }
-
-          if (result.files && result.files.length > 0) {
-            const generatedImage = result.files[0];
-            const mimeType = (generatedImage as any).mimeType || "image/png";
-            const imageDataUrl = `data:${mimeType};base64,${generatedImage.base64}`;
-            allImages[styleConfig.id] = imageDataUrl;
-            console.log(`Generated ${styleConfig.name} successfully`);
-          } else {
-            errors.push(`Failed to generate ${styleConfig.name}`);
-          }
-        } catch (error) {
-          console.error(`Error generating ${styleConfig.name}:`, error);
-          errors.push(`Error with ${styleConfig.name}: ${String(error)}`);
+      results.forEach((result) => {
+        if (result.image) {
+          allImages[result.id] = result.image;
+        } else {
+          errors.push(`Failed to generate ${result.id}`);
         }
-      }
+      });
 
       return NextResponse.json({
         success: true,
@@ -119,44 +134,35 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const result = await generateText({
+    const response = await ai.models.generateContent({
       model: MODEL_NAME,
-      prompt: styleConfig.prompt,
-      providerOptions: {
-        google: {
-          referenceImages: [
-            {
-              bytesBase64Encoded: base64Data,
+      contents: {
+        parts: [
+          {
+            inlineData: {
+              mimeType: "image/jpeg",
+              data: cleanBase64,
             },
-          ],
-        },
+          },
+          {
+            text: styleConfig.prompt,
+          },
+        ],
       },
-    } as any);
-
-    if (result.text) {
-      console.log("Model response:", result.text);
-    }
-
-    if (!result.files || result.files.length === 0) {
-      return NextResponse.json(
-        { error: "No image generated", details: result.text },
-        { status: 500 },
-      );
-    }
-
-    console.log(`Generated ${result.files.length} image(s)`);
-    console.log("Usage:", JSON.stringify(result.usage, null, 2));
-
-    const generatedImage = result.files[0];
-    const mimeType = (generatedImage as any).mimeType || "image/png";
-    const imageDataUrl = `data:${mimeType};base64,${generatedImage.base64}`;
-
-    return NextResponse.json({
-      success: true,
-      image: imageDataUrl,
-      message: "Image enhancement completed",
-      usage: result.usage,
     });
+
+    for (const part of response.candidates?.[0]?.content?.parts || []) {
+      if (part.inlineData) {
+        const imageDataUrl = `data:image/png;base64,${part.inlineData.data}`;
+        return NextResponse.json({
+          success: true,
+          image: imageDataUrl,
+          message: "Image enhancement completed",
+        });
+      }
+    }
+
+    return NextResponse.json({ error: "No image generated" }, { status: 500 });
   } catch (error) {
     console.error("Error generating smile:", error);
     return NextResponse.json(

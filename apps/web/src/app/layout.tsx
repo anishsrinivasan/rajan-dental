@@ -22,8 +22,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${montserrat.variable} font-sans antialiased`}>
+    <html lang="en" suppressHydrationWarning className={montserrat.variable}>
+      <body className="font-sans antialiased">
         <Providers>
           <div className="grid h-svh grid-rows-[auto_1fr]">{children}</div>
         </Providers>
