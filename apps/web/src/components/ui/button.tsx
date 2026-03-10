@@ -1,6 +1,10 @@
+"use client";
+
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
+import { useCallback } from "react";
+import { useWebHaptics } from "web-haptics/react";
 
 import { cn } from "@/lib/utils";
 
@@ -39,16 +43,37 @@ const buttonVariants = cva(
 	}
 );
 
+type HapticType = "nudge" | "success";
+
 function Button({
 	className,
 	variant = "default",
 	size = "default",
+	haptic = "nudge",
+	onClick,
 	...props
-}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+}: ButtonPrimitive.Props &
+	VariantProps<typeof buttonVariants> & {
+		/** Haptic feedback: "nudge" for buttons (default), "success" for radio/selection. Set to false to disable. */
+		haptic?: HapticType | false;
+	}) {
+	// debug: true enables audio feedback when vibration isn't available (e.g. desktop)
+	const { trigger } = useWebHaptics({ debug: true });
+	const handleClick = useCallback(
+		(e: React.MouseEvent<HTMLButtonElement>) => {
+			if (haptic) {
+				trigger(haptic);
+			}
+			// Base UI passes an augmented event; pass through for compatibility
+			onClick?.(e as Parameters<NonNullable<typeof onClick>>[0]);
+		},
+		[haptic, trigger, onClick]
+	);
 	return (
 		<ButtonPrimitive
 			className={cn(buttonVariants({ variant, size, className }))}
 			data-slot="button"
+			onClick={handleClick}
 			{...props}
 		/>
 	);
