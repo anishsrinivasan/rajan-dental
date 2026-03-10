@@ -12,8 +12,9 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "my-better-t-app",
-  description: "my-better-t-app",
+  title: "Smile On! AI Smile Makeover",
+  description:
+    "Smile On! AI Smile Makeover is an innovative web application that uses artificial intelligence to help users visualize and enhance their smiles. With advanced image processing and machine learning algorithms, users can upload their photos and see potential improvements to their teeth and overall smile aesthetics. Whether you're considering cosmetic dentistry or just want to see how a new smile could look, Smile On! provides a fun and interactive way to explore your smile transformation possibilities.",
 };
 
 export default function RootLayout({
