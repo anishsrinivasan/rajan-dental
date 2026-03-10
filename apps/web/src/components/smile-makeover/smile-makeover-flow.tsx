@@ -1,13 +1,14 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import { ArrowDown, ArrowRight } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import logo from "../../assets/Logo.png";
 import { ImagePreviewStep } from "./image-preview-step";
 import { ImageUploadStep } from "./image-upload-step";
-import { SmileStyleStep } from "./smile-style-step";
+import { SmileStyleStep, type SmileStyleStepRef } from "./smile-style-step";
 import { StepIndicator } from "./step-indicator";
 import { VerificationStep } from "./verification-step";
 import { VerificationSuccessStep } from "./verification-success-step";
@@ -23,6 +24,8 @@ export function SmileMakeoverFlow() {
 	const [currentStep, setCurrentStep] = useState<Step>("upload");
 	const [selectedImage, setSelectedImage] = useState<string | null>(null);
 	const [selectedStyle, setSelectedStyle] = useState<string | null>(null);
+	const [isStyleStepLoading, setIsStyleStepLoading] = useState(false);
+	const smileStyleStepRef = useRef<SmileStyleStepRef>(null);
 
 	const steps: Step[] = [
 		"upload",
@@ -32,6 +35,12 @@ export function SmileMakeoverFlow() {
 		"style-selection",
 	];
 	const currentStepIndex = steps.indexOf(currentStep);
+
+	useEffect(() => {
+		if (currentStep !== "style-selection") {
+			setIsStyleStepLoading(false);
+		}
+	}, [currentStep]);
 
 	const handleImageSelect = (file: File) => {
 		const url = URL.createObjectURL(file);
@@ -105,11 +114,11 @@ export function SmileMakeoverFlow() {
 			<main className="flex flex-1 flex-col">
 				<div className="mx-auto flex min-h-screen w-full max-w-md flex-col">
 					{/* Header */}
-					<div className="shrink-0 px-4 pt-4 pb-2">
-						<div className="mb-3">
+					<div className="shrink-0 px-4 pt-3 pb-1">
+						<div className="mb-1">
 							<Image alt="logo" className="h-8 w-auto" src={logo} />
 						</div>
-						<div className="pt-12 text-center">
+						<div className="pt-5 text-center">
 							<h1 className="font-medium text-3xl text-primary leading-tight">
 								Smile On!
 							</h1>
@@ -119,9 +128,16 @@ export function SmileMakeoverFlow() {
 						</div>
 					</div>
 
-					{/* Component Area */}
-					<div className="flex flex-1 items-center justify-center px-4 py-4">
-						<div className="w-full">
+					{/* Component Area - items-start on style-selection to reduce vertical space on mobile */}
+					<div
+						className={cn(
+							"flex flex-1 px-4 py-2",
+							currentStep === "style-selection"
+								? "min-h-0 items-start justify-center"
+								: "items-center justify-center"
+						)}
+					>
+						<div className="w-full min-w-0">
 							{currentStep === "upload" && (
 								<ImageUploadStep onImageSelect={handleImageSelect} />
 							)}
@@ -140,22 +156,37 @@ export function SmileMakeoverFlow() {
 							{currentStep === "style-selection" && selectedImage && (
 								<SmileStyleStep
 									imageUrl={selectedImage}
+									onLoadingChange={setIsStyleStepLoading}
 									onStyleSelect={handleStyleSelect}
+									ref={smileStyleStepRef}
 								/>
 							)}
 						</div>
 					</div>
 
-					{/* Fixed Bottom Section */}
-					<div className="sticky bottom-0 shrink-0 bg-background px-4 py-4">
-						<div className="flex flex-col gap-y-4">
+					{/* Sticky bottom: Save image (style step only), stepper, CTA */}
+					<div className="sticky bottom-0 shrink-0 bg-background px-4 py-2">
+						<div className="flex flex-col gap-y-2">
+							{currentStep === "style-selection" && (
+								<Button
+									className="w-full cursor-pointer justify-center gap-2 rounded-none border-0 bg-transparent p-0 py-1 font-bold text-foreground text-sm shadow-none hover:bg-transparent hover:opacity-80"
+									onClick={() => smileStyleStepRef.current?.download()}
+									variant="ghost"
+								>
+									<ArrowDown className="size-5" />
+									<span>Save image</span>
+								</Button>
+							)}
 							<StepIndicator
 								currentStep={currentStepIndex}
 								totalSteps={steps.length}
 							/>
 							<Button
 								className="w-full cursor-pointer rounded-full bg-primary font-semibold text-[16px]"
-								disabled={currentStep === "upload" && !selectedImage}
+								disabled={
+									(currentStep === "upload" && !selectedImage) ||
+									(currentStep === "style-selection" && isStyleStepLoading)
+								}
 								onClick={handleNext}
 								size="lg"
 							>

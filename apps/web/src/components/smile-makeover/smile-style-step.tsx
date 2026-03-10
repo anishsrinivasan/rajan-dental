@@ -1,8 +1,8 @@
 "use client";
 
 import confetti from "canvas-confetti";
-import { ArrowDown, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
@@ -14,9 +14,14 @@ interface SmileStyle {
 	name: string;
 }
 
+export interface SmileStyleStepRef {
+	download: () => void;
+}
+
 interface SmileStyleStepProps {
 	className?: string;
 	imageUrl: string;
+	onLoadingChange?: (loading: boolean) => void;
 	onStyleSelect: (styleId: string) => void;
 }
 
@@ -43,11 +48,13 @@ const smileStyles: SmileStyle[] = [
 	},
 ];
 
-export function SmileStyleStep({
-	imageUrl,
-	onStyleSelect,
-	className,
-}: SmileStyleStepProps) {
+const SmileStyleStepComponent = forwardRef<
+	SmileStyleStepRef,
+	SmileStyleStepProps
+>(function SmileStyleStep(
+	{ imageUrl, onLoadingChange, onStyleSelect, className },
+	ref
+) {
 	const [selectedStyle, setSelectedStyle] = useState<string | null>(
 		"natural-warmth"
 	);
@@ -64,10 +71,14 @@ export function SmileStyleStep({
 	}, [imageUrl]);
 
 	useEffect(() => {
+		onLoadingChange?.(isGenerating);
+	}, [isGenerating, onLoadingChange]);
+
+	useEffect(() => {
 		if (!isGenerating && generatedImages["natural-warmth"]) {
 			onStyleSelect("natural-warmth");
 		}
-	}, [isGenerating, generatedImages]);
+	}, [isGenerating, generatedImages, onStyleSelect]);
 
 	useEffect(() => {
 		if (!showConfetti) {
@@ -93,14 +104,6 @@ export function SmileStyleStep({
 		setGenerationProgress(0);
 
 		try {
-			const response = await fetch(imageUrl);
-			const blob = await response.blob();
-			const base64 = await new Promise<string>((resolve) => {
-				const reader = new FileReader();
-				reader.onloadend = () => resolve(reader.result as string);
-				reader.readAsDataURL(blob);
-			});
-
 			const progressInterval = setInterval(() => {
 				setGenerationProgress((prev) => {
 					if (prev >= 85) {
@@ -112,7 +115,14 @@ export function SmileStyleStep({
 				});
 			}, 300);
 
-			// Single API call to generate all 4 styles
+			const response = await fetch(imageUrl);
+			const blob = await response.blob();
+			const base64 = await new Promise<string>((resolve) => {
+				const reader = new FileReader();
+				reader.onloadend = () => resolve(reader.result as string);
+				reader.readAsDataURL(blob);
+			});
+
 			const apiResponse = await fetch("/api/generate-smile", {
 				method: "POST",
 				headers: {
@@ -178,6 +188,10 @@ export function SmileStyleStep({
 		}
 	};
 
+	useImperativeHandle(ref, () => ({ download: handleDownload }), [
+		handleDownload,
+	]);
+
 	// Show loading screen while generating
 	if (isGenerating) {
 		return (
@@ -215,14 +229,18 @@ export function SmileStyleStep({
 
 	return (
 		<div
-			className={cn("flex h-screen flex-col gap-2 overflow-hidden", className)}
+			className={cn(
+				"flex min-h-0 flex-1 flex-col gap-1 overflow-hidden",
+				className
+			)}
 		>
-			{/* Image Comparison */}
+			{/* Image Comparison - max height on mobile to reduce overall screen height */}
 			{currentImage ? (
 				<div className="relative shrink-0 overflow-hidden rounded-2xl">
 					<ImageComparisonSlider
 						afterImage={currentImage}
 						beforeImage={imageUrl}
+						className="aspect-square max-h-[38vh] w-full"
 					/>
 				</div>
 			) : (
@@ -249,11 +267,11 @@ export function SmileStyleStep({
 
 			{/* Style Selection - Scrollable (radio-style options) */}
 			<ScrollArea className="min-h-0 flex-1">
-				<div className="space-y-3 p-1">
+				<div className="space-y-2 p-0.5">
 					{smileStyles.map((style) => (
 						<Button
 							className={cn(
-								"h-auto w-full justify-start rounded-xl p-4 text-left transition-all",
+								"h-auto w-full justify-start rounded-xl p-3 text-left transition-all",
 								selectedStyle === style.id
 									? "border border-primary bg-primary/10"
 									: "bg-background",
@@ -303,17 +321,9 @@ export function SmileStyleStep({
 					))}
 				</div>
 			</ScrollArea>
-
-			{/* Save image - plain text link style, no button chrome */}
-			<Button
-				className="relative z-20 w-full shrink-0 cursor-pointer justify-center gap-2 rounded-none border-0 bg-transparent p-0 py-3 font-bold text-foreground text-sm shadow-none hover:bg-transparent hover:opacity-80"
-				disabled={!(selectedStyle && generatedImages[selectedStyle])}
-				onClick={handleDownload}
-				variant="ghost"
-			>
-				<ArrowDown className="size-5" />
-				<span>Save image</span>
-			</Button>
 		</div>
 	);
-}
+});
+SmileStyleStepComponent.displayName = "SmileStyleStep";
+
+export const SmileStyleStep = SmileStyleStepComponent;
