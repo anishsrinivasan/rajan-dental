@@ -109,7 +109,7 @@ export function SmileMakeoverFlow() {
             <div className="mb-3">
               <Image src={logo} alt="logo" className="h-8 w-auto" />
             </div>
-            <div className="text-center pt-16">
+            <div className="text-center pt-12">
               <h1 className="text-3xl text-primary font-medium leading-tight">
                 Smile On!
               </h1>

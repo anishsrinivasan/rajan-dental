@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { Loader2, ArrowDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ImageComparisonSlider } from "./image-comparison-slider";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Confetti } from "@/components/ui/confetti";
 
 interface SmileStyle {
   id: string;
@@ -45,13 +47,16 @@ export function SmileStyleStep({
   onStyleSelect,
   className,
 }: SmileStyleStepProps) {
-  const [selectedStyle, setSelectedStyle] = useState<string | null>("natural-warmth");
+  const [selectedStyle, setSelectedStyle] = useState<string | null>(
+    "natural-warmth",
+  );
   const [generatedImages, setGeneratedImages] = useState<
     Record<string, string>
   >({});
   const [isGenerating, setIsGenerating] = useState(true);
   const [generationProgress, setGenerationProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
     generateAllImages();
@@ -111,8 +116,8 @@ export function SmileStyleStep({
       if (data.images) {
         setGenerationProgress(95);
         setTimeout(() => setGenerationProgress(100), 200);
-        
         setGeneratedImages(data.images);
+        setShowConfetti(true);
 
         if (data.errors && data.errors.length > 0) {
           console.warn("Some images failed to generate:", data.errors);
@@ -157,7 +162,7 @@ export function SmileStyleStep({
   if (isGenerating) {
     return (
       <div className={cn("flex flex-col gap-6", className)}>
-        <div className="flex min-h-100 w-full flex-col items-center justify-center rounded-2xl bg-muted shadow-inner p-6 border-2 border-red-500">
+        <div className="flex min-h-100 aspect-square flex-col items-center justify-center rounded-2xl bg-muted shadow-inner p-6 border-2 border-red-500">
           <div className="flex flex-col items-center gap-4">
             <Loader2 className="size-12 animate-spin text-primary" />
             <div className="text-center">
@@ -189,15 +194,35 @@ export function SmileStyleStep({
   const currentImage = selectedStyle ? generatedImages[selectedStyle] : null;
 
   return (
-    <div className={cn("flex flex-col gap-2 ", className)}>
+    <div
+      className={cn("flex flex-col gap-2 h-screen overflow-hidden", className)}
+    >
       {/* Image Comparison */}
       {currentImage ? (
-        <ImageComparisonSlider
-          beforeImage={imageUrl}
-          afterImage={currentImage}
-        />
+        <div className="shrink-0 relative">
+          <ImageComparisonSlider
+            beforeImage={imageUrl}
+            afterImage={currentImage}
+          />
+          {/* Confetti positioned relative to the image card */}
+          {showConfetti && (
+            <Confetti
+              className="absolute inset-0 pointer-events-none z-50"
+              options={{
+                particleCount: 400,
+                spread: 90,
+                origin: { x: 0.5, y: 0.5 },
+                angle: 90,
+                startVelocity: 30,
+                gravity: 0.5,
+                drift: 0,
+                ticks: 300,
+              }}
+            />
+          )}
+        </div>
       ) : (
-        <div className="flex aspect-square w-full items-center justify-center rounded-2xl bg-muted/30 shadow-inner">
+        <div className="flex aspect-square w-full items-center justify-center rounded-2xl bg-muted/30 shadow-inner shrink-0">
           <p className="text-center text-muted-foreground text-sm">
             Loading your enhanced smile...
           </p>
@@ -206,70 +231,72 @@ export function SmileStyleStep({
 
       {/* Error Message */}
       {error && (
-        <div className="rounded-lg bg-destructive/10 p-3 text-center text-destructive text-xs">
+        <div className="rounded-lg bg-destructive/10 p-3 text-center text-destructive text-xs shrink-0">
           {error}
         </div>
       )}
 
-      {/* Style Selection */}
-      <div className="space-y-3">
-        {smileStyles.map((style) => (
-          <button
-            key={style.id}
-            onClick={() => handleStyleSelect(style.id)}
-            disabled={!generatedImages[style.id]}
-            className={cn(
-              "w-full rounded-xl p-4 text-left transition-all",
-              selectedStyle === style.id
-                ? "bg-primary/10 border-primary border"
-                : "bg-background",
-              !generatedImages[style.id] && "cursor-not-allowed opacity-50",
-            )}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <h4 className="font-semibold text-foreground text-base">
-                  {style.name}
-                </h4>
-                <p className="mt-1 text-muted-foreground text-sm">
-                  {style.description}
-                </p>
+      {/* Style Selection - Scrollable */}
+      <ScrollArea className="flex-1 min-h-0">
+        <div className="space-y-3 p-1">
+          {smileStyles.map((style) => (
+            <button
+              key={style.id}
+              onClick={() => handleStyleSelect(style.id)}
+              disabled={!generatedImages[style.id]}
+              className={cn(
+                "w-full rounded-xl p-4 text-left transition-all",
+                selectedStyle === style.id
+                  ? "bg-primary/10 border-primary border"
+                  : "bg-background",
+                !generatedImages[style.id] && "cursor-not-allowed opacity-50",
+              )}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <h4 className="font-semibold text-foreground text-base">
+                    {style.name}
+                  </h4>
+                  <p className="mt-1 text-muted-foreground text-sm">
+                    {style.description}
+                  </p>
+                </div>
+                <div
+                  className={cn(
+                    "ml-3 flex size-7 shrink-0 items-center justify-center rounded-full border-2 transition-all",
+                    selectedStyle === style.id
+                      ? "border-primary bg-primary scale-110"
+                      : "border-primary",
+                  )}
+                >
+                  {selectedStyle === style.id && (
+                    <svg
+                      className="size-4 text-primary-foreground"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={3}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  )}
+                </div>
               </div>
-              <div
-                className={cn(
-                  "ml-3 flex size-7 shrink-0 items-center justify-center rounded-full border-2 transition-all",
-                  selectedStyle === style.id
-                    ? "border-primary bg-primary scale-110"
-                    : "border-primary",
-                )}
-              >
-                {selectedStyle === style.id && (
-                  <svg
-                    className="size-4 text-primary-foreground"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={3}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                )}
-              </div>
-            </div>
-          </button>
-        ))}
-      </div>
+            </button>
+          ))}
+        </div>
+      </ScrollArea>
 
       {/* Save Image Button */}
       <button
         onClick={handleDownload}
         disabled={!selectedStyle || !generatedImages[selectedStyle]}
         className={cn(
-          "flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl p-4 ",
+          "flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl p-4 shrink-0 relative z-20",
         )}
       >
         <ArrowDown className="size-5" />
