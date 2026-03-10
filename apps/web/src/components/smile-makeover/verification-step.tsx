@@ -1,14 +1,14 @@
 "use client";
 
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import googleLogo from "../../assets/google-logo.png";
 import verifyLogo from "../../assets/verify.png";
 
 interface VerificationStepProps {
-  onGoogleVerify: () => void;
   className?: string;
+  onGoogleVerify: () => void;
 }
 
 export function VerificationStep({
@@ -17,10 +17,10 @@ export function VerificationStep({
 }: VerificationStepProps) {
   return (
     <div
-      className={cn("flex mt-16 flex-col items-center gap-8 py-2", className)}
+      className={cn("mt-16 flex flex-col items-center gap-8 py-2", className)}
     >
       <div className="flex items-center justify-center rounded-full">
-        <Image src={verifyLogo} alt="" />
+        <Image alt="" src={verifyLogo} />
       </div>
 
       <div className="text-center">
@@ -32,8 +32,8 @@ export function VerificationStep({
         </p>
       </div>
 
-      <Button variant="outline" size="lg" className="w-72 rounded-2xl gap-3">
-        <Image src={googleLogo} alt="" />
+      <Button className="w-72 gap-3 rounded-2xl" size="lg" variant="outline">
+        <Image alt="" src={googleLogo} />
         Continue with Google
       </Button>
     </div>

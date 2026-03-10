@@ -1,22 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Loader2, ArrowDown } from "lucide-react";
+import confetti from "canvas-confetti";
+import { ArrowDown, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useWebHaptics } from "web-haptics/react";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { ImageComparisonSlider } from "./image-comparison-slider";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Confetti } from "@/components/ui/confetti";
 
 interface SmileStyle {
+  description: string;
   id: string;
   name: string;
-  description: string;
 }
 
 interface SmileStyleStepProps {
+  className?: string;
   imageUrl: string;
   onStyleSelect: (styleId: string) => void;
-  className?: string;
 }
 
 const smileStyles: SmileStyle[] = [
@@ -57,6 +58,7 @@ export function SmileStyleStep({
   const [generationProgress, setGenerationProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
+  const { trigger: triggerHaptic } = useWebHaptics();
 
   useEffect(() => {
     generateAllImages();
@@ -67,6 +69,30 @@ export function SmileStyleStep({
       onStyleSelect("natural-warmth");
     }
   }, [isGenerating, generatedImages]);
+
+  useEffect(() => {
+    if (!showConfetti) {
+      return;
+    }
+    confetti({
+      particleCount: 400,
+      spread: 90,
+      origin: { x: 0.5, y: 0.5 },
+      angle: 90,
+      startVelocity: 30,
+      gravity: 0.5,
+      drift: 0,
+      ticks: 300,
+    });
+    try {
+      const audio = new Audio("/sounds/success.mp3");
+      void audio.play().catch(() => {});
+    } catch {
+      // Success sound optional; ignore if missing or autoplay blocked
+    }
+    const t = setTimeout(() => setShowConfetti(false), 400);
+    return () => clearTimeout(t);
+  }, [showConfetti]);
 
   const generateAllImages = async () => {
     setIsGenerating(true);
@@ -117,6 +143,7 @@ export function SmileStyleStep({
         setGenerationProgress(95);
         setTimeout(() => setGenerationProgress(100), 200);
         setGeneratedImages(data.images);
+        triggerHaptic("success");
         setShowConfetti(true);
 
         if (data.errors && data.errors.length > 0) {
@@ -134,13 +161,16 @@ export function SmileStyleStep({
   };
 
   const handleStyleSelect = (styleId: string) => {
+    triggerHaptic("nudge");
     setSelectedStyle(styleId);
     onStyleSelect(styleId);
   };
 
   const handleDownload = async () => {
-    if (!selectedStyle || !generatedImages[selectedStyle]) return;
-
+    if (!(selectedStyle && generatedImages[selectedStyle])) {
+      return;
+    }
+    triggerHaptic("nudge");
     try {
       const imageToDownload = generatedImages[selectedStyle];
       const response = await fetch(imageToDownload);
@@ -162,7 +192,7 @@ export function SmileStyleStep({
   if (isGenerating) {
     return (
       <div className={cn("flex flex-col gap-6", className)}>
-        <div className="flex min-h-100 aspect-square flex-col items-center justify-center rounded-2xl bg-muted shadow-inner p-6 border-2 border-red-500">
+        <div className="flex aspect-square min-h-100 flex-col items-center justify-center rounded-2xl bg-muted p-6 shadow-inner">
           <div className="flex flex-col items-center gap-4">
             <Loader2 className="size-12 animate-spin text-primary" />
             <div className="text-center">
@@ -195,34 +225,18 @@ export function SmileStyleStep({
 
   return (
     <div
-      className={cn("flex flex-col gap-2 h-screen overflow-hidden", className)}
+      className={cn("flex h-screen flex-col gap-2 overflow-hidden", className)}
     >
       {/* Image Comparison */}
       {currentImage ? (
-        <div className="shrink-0 relative">
+        <div className="relative shrink-0">
           <ImageComparisonSlider
-            beforeImage={imageUrl}
             afterImage={currentImage}
+            beforeImage={imageUrl}
           />
-          {/* Confetti positioned relative to the image card */}
-          {showConfetti && (
-            <Confetti
-              className="absolute inset-0 pointer-events-none z-50"
-              options={{
-                particleCount: 400,
-                spread: 90,
-                origin: { x: 0.5, y: 0.5 },
-                angle: 90,
-                startVelocity: 30,
-                gravity: 0.5,
-                drift: 0,
-                ticks: 300,
-              }}
-            />
-          )}
         </div>
       ) : (
-        <div className="flex aspect-square w-full items-center justify-center rounded-2xl bg-muted/30 shadow-inner shrink-0">
+        <div className="flex aspect-square w-full shrink-0 items-center justify-center rounded-2xl bg-muted/30 shadow-inner">
           <p className="text-center text-muted-foreground text-sm">
             Loading your enhanced smile...
           </p>
@@ -231,30 +245,37 @@ export function SmileStyleStep({
 
       {/* Error Message */}
       {error && (
-        <div className="rounded-lg bg-destructive/10 p-3 text-center text-destructive text-xs shrink-0">
-          {error}
+        <div className="shrink-0 space-y-2 rounded-lg bg-destructive/10 p-3 text-center text-destructive text-xs">
+          <p>{error}</p>
+          <button
+            className="rounded-lg bg-primary px-3 py-1.5 font-medium text-primary-foreground text-xs hover:opacity-90"
+            onClick={() => generateAllImages()}
+            type="button"
+          >
+            Try again
+          </button>
         </div>
       )}
 
       {/* Style Selection - Scrollable */}
-      <ScrollArea className="flex-1 min-h-0">
+      <ScrollArea className="min-h-0 flex-1">
         <div className="space-y-3 p-1">
           {smileStyles.map((style) => (
             <button
-              key={style.id}
-              onClick={() => handleStyleSelect(style.id)}
-              disabled={!generatedImages[style.id]}
               className={cn(
                 "w-full rounded-xl p-4 text-left transition-all",
                 selectedStyle === style.id
-                  ? "bg-primary/10 border-primary border"
+                  ? "border border-primary bg-primary/10"
                   : "bg-background",
                 !generatedImages[style.id] && "cursor-not-allowed opacity-50",
               )}
+              disabled={!generatedImages[style.id]}
+              key={style.id}
+              onClick={() => handleStyleSelect(style.id)}
             >
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <h4 className="font-semibold text-foreground text-base">
+                  <h4 className="font-semibold text-base text-foreground">
                     {style.name}
                   </h4>
                   <p className="mt-1 text-muted-foreground text-sm">
@@ -265,7 +286,7 @@ export function SmileStyleStep({
                   className={cn(
                     "ml-3 flex size-7 shrink-0 items-center justify-center rounded-full border-2 transition-all",
                     selectedStyle === style.id
-                      ? "border-primary bg-primary scale-110"
+                      ? "scale-110 border-primary bg-primary"
                       : "border-primary",
                   )}
                 >
@@ -277,10 +298,10 @@ export function SmileStyleStep({
                       viewBox="0 0 24 24"
                     >
                       <path
+                        d="M5 13l4 4L19 7"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={3}
-                        d="M5 13l4 4L19 7"
                       />
                     </svg>
                   )}
@@ -293,11 +314,11 @@ export function SmileStyleStep({
 
       {/* Save Image Button */}
       <button
-        onClick={handleDownload}
-        disabled={!selectedStyle || !generatedImages[selectedStyle]}
         className={cn(
-          "flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl p-4 shrink-0 relative z-20",
+          "relative z-20 flex w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl p-4",
         )}
+        disabled={!(selectedStyle && generatedImages[selectedStyle])}
+        onClick={handleDownload}
       >
         <ArrowDown className="size-5" />
         <span className="font-bold text-sm">Save image</span>

@@ -35,19 +35,19 @@ export function ImagePreviewStep({
   };
 
   return (
-    <div className={cn("flex flex-col items-center gap-4 ", className)}>
+    <div className={cn("flex flex-col items-center gap-4", className)}>
       {/* Image Preview with Grid Overlay */}
       <div className="relative w-full overflow-hidden rounded-2xl border-2 border-primary p-4">
         <div className="relative aspect-square w-full overflow-hidden">
           <Image
             alt="Preview"
-            className="object-cover transition-transform duration-200 border border-primary rounded-lg"
+            className="rounded-lg border border-primary object-cover transition-transform duration-200"
             fill
             src={imageUrl}
             style={{ transform: `scale(${zoom / 100})` }}
           />
           {/* Grid Overlay */}
-          <div className="pointer-events-none absolute inset-0 ">
+          <div className="pointer-events-none absolute inset-0">
             <svg className="size-full" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <pattern
@@ -82,7 +82,7 @@ export function ImagePreviewStep({
       </div>
 
       {/* Zoom Controls */}
-      <div className="flex w-full items-center gap-x-3 ">
+      <div className="flex w-full items-center gap-x-3">
         <Button
           aria-label="Zoom out"
           className="flex size-10 shrink-0 items-center justify-center border-primary text-primary transition-colors"
@@ -127,8 +127,8 @@ export function ImagePreviewStep({
         type="file"
       />
 
-      <div className="w-full rounded-lg px-4 ">
-        <div className="flex items-start gap-3 ">
+      <div className="w-full rounded-lg px-4">
+        <div className="flex items-start gap-3">
           <Checkbox
             checked={isChecked}
             className="mt-0.5 rounded-lg p-3"
@@ -136,7 +136,7 @@ export function ImagePreviewStep({
             onCheckedChange={(checked) => setIsChecked(checked === true)}
           />
           <label
-            className="cursor-pointer text-muted-foreground text-[10px] italic leading-relaxed"
+            className="cursor-pointer text-[10px] text-muted-foreground italic leading-relaxed"
             htmlFor="consent"
           >
             I confirm that I have the necessary rights and permissions to upload

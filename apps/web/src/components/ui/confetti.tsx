@@ -1,7 +1,14 @@
 "use client";
 
+import type {
+  GlobalOptions as ConfettiGlobalOptions,
+  CreateTypes as ConfettiInstance,
+  Options as ConfettiOptions,
+} from "canvas-confetti";
+import confetti from "canvas-confetti";
+import type React from "react";
 import type { ReactNode } from "react";
-import React, {
+import {
   createContext,
   forwardRef,
   useCallback,
@@ -10,12 +17,6 @@ import React, {
   useMemo,
   useRef,
 } from "react";
-import type {
-  GlobalOptions as ConfettiGlobalOptions,
-  CreateTypes as ConfettiInstance,
-  Options as ConfettiOptions,
-} from "canvas-confetti";
-import confetti from "canvas-confetti";
 
 import { Button } from "@/components/ui/button";
 
@@ -48,16 +49,16 @@ const ConfettiComponent = forwardRef<ConfettiRef, Props>((props, ref) => {
   const canvasRef = useCallback(
     (node: HTMLCanvasElement) => {
       if (node !== null) {
-        if (instanceRef.current) return;
+        if (instanceRef.current) {
+          return;
+        }
         instanceRef.current = confetti.create(node, {
           ...globalOptions,
           resize: true,
         });
-      } else {
-        if (instanceRef.current) {
-          instanceRef.current.reset();
-          instanceRef.current = null;
-        }
+      } else if (instanceRef.current) {
+        instanceRef.current.reset();
+        instanceRef.current = null;
       }
     },
     [globalOptions],

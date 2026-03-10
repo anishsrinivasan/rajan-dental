@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 import successLogo from "../../assets/success.png";
 
 interface VerificationSuccessStepProps {
@@ -12,9 +12,9 @@ export function VerificationSuccessStep({
   className,
 }: VerificationSuccessStepProps) {
   return (
-    <div className={cn("flex flex-col items-center py-26 gap-2", className)}>
-      <div className="flex size-20 items-center justify-center ">
-        <Image src={successLogo} alt="Success" />
+    <div className={cn("flex flex-col items-center gap-2 py-26", className)}>
+      <div className="flex size-20 items-center justify-center">
+        <Image alt="Success" src={successLogo} />
       </div>
       <div className="text-center">
         <h3 className="font-semibold text-foreground text-lg">

@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
+import { type NextRequest, NextResponse } from "next/server";
 
 const MODEL_NAME = "gemini-2.5-flash-image";
 
@@ -100,6 +100,8 @@ const generateAllStyles = async (
   return resultMap;
 };
 
+const MAX_BASE64_LENGTH = 6 * 1024 * 1024; // ~6MB base64
+
 export async function POST(request: NextRequest) {
   try {
     const { imageBase64, style, generateAll } = await request.json();
@@ -109,6 +111,13 @@ export async function POST(request: NextRequest) {
         { error: "Missing image data" },
         { status: 400 },
       );
+    }
+
+    if (
+      typeof imageBase64 === "string" &&
+      imageBase64.length > MAX_BASE64_LENGTH
+    ) {
+      return NextResponse.json({ error: "Image too large" }, { status: 413 });
     }
 
     const apiKey = process.env.GEMINI_API_KEY;

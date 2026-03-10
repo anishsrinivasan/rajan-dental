@@ -1,16 +1,16 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { StepIndicator } from "./step-indicator";
-import { ImageUploadStep } from "./image-upload-step";
-import { ImagePreviewStep } from "./image-preview-step";
-import { VerificationStep } from "./verification-step";
-import { VerificationSuccessStep } from "./verification-success-step";
-import { SmileStyleStep } from "./smile-style-step";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import logo from "../../assets/Logo.png";
+import { ImagePreviewStep } from "./image-preview-step";
+import { ImageUploadStep } from "./image-upload-step";
+import { SmileStyleStep } from "./smile-style-step";
+import { StepIndicator } from "./step-indicator";
+import { VerificationStep } from "./verification-step";
+import { VerificationSuccessStep } from "./verification-success-step";
 
 type Step =
   | "upload"
@@ -100,27 +100,27 @@ export function SmileMakeoverFlow() {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-background overflow-y-auto">
+    <div className="flex h-screen flex-col overflow-y-auto bg-background">
       {/* Main Content */}
       <main className="flex flex-1 flex-col">
-        <div className="mx-auto w-full max-w-md flex flex-col min-h-screen">
+        <div className="mx-auto flex min-h-screen w-full max-w-md flex-col">
           {/* Header */}
-          <div className="px-4 pt-4 pb-2 shrink-0">
+          <div className="shrink-0 px-4 pt-4 pb-2">
             <div className="mb-3">
-              <Image src={logo} alt="logo" className="h-8 w-auto" />
+              <Image alt="logo" className="h-8 w-auto" src={logo} />
             </div>
-            <div className="text-center pt-12">
-              <h1 className="text-3xl text-primary font-medium leading-tight">
+            <div className="pt-12 text-center">
+              <h1 className="font-medium text-3xl text-primary leading-tight">
                 Smile On!
               </h1>
-              <p className="text-3xl text-[#0D0D0D] font-medium leading-tight">
+              <p className="font-medium text-3xl text-[#0D0D0D] leading-tight">
                 AI Smile Makeover
               </p>
             </div>
           </div>
 
           {/* Component Area */}
-          <div className="flex-1 px-4 py-4 flex items-center justify-center">
+          <div className="flex flex-1 items-center justify-center px-4 py-4">
             <div className="w-full">
               {currentStep === "upload" && (
                 <ImageUploadStep onImageSelect={handleImageSelect} />
@@ -128,9 +128,9 @@ export function SmileMakeoverFlow() {
               {currentStep === "preview" && selectedImage && (
                 <ImagePreviewStep
                   imageUrl={selectedImage}
-                  onRemove={handleImageRemove}
                   onConfirm={handleImageConfirm}
                   onImageChange={handleImageChange}
+                  onRemove={handleImageRemove}
                 />
               )}
               {currentStep === "verify" && (
@@ -147,17 +147,17 @@ export function SmileMakeoverFlow() {
           </div>
 
           {/* Fixed Bottom Section */}
-          <div className="sticky bottom-0 bg-background px-4 py-4 shrink-0">
+          <div className="sticky bottom-0 shrink-0 bg-background px-4 py-4">
             <div className="flex flex-col gap-y-4">
               <StepIndicator
                 currentStep={currentStepIndex}
                 totalSteps={steps.length}
               />
               <Button
+                className="w-full cursor-pointer rounded-full bg-primary font-semibold text-[16px]"
+                disabled={currentStep === "upload" && !selectedImage}
                 onClick={handleNext}
                 size="lg"
-                className="w-full bg-primary rounded-full cursor-pointer font-semibold text-[16px]"
-                disabled={currentStep === "upload" && !selectedImage}
               >
                 {getButtonText()}
                 <ArrowRight />
