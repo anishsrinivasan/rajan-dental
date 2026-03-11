@@ -254,7 +254,7 @@ const SmileStyleStepComponent = forwardRef<
       )}
 
       {/* Style Selection - Scrollable (radio-style options) */}
-      <ScrollArea className="min-h-0 flex-1">
+      <div className="min-h-0 flex-1">
         <div className="space-y-2 p-0.5">
           {smileStyles.map((style) => (
             <Button
@@ -308,7 +308,7 @@ const SmileStyleStepComponent = forwardRef<
             </Button>
           ))}
         </div>
-      </ScrollArea>
+      </div>
     </div>
   );
 });
