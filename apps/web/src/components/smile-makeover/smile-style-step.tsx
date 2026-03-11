@@ -281,7 +281,7 @@ const SmileStyleStepComponent = forwardRef<
 								</div>
 								<div
 									className={cn(
-										"ml-3 flex size-7 shrink-0 items-center justify-center rounded-full border-2 transition-all",
+										"ml-3 flex size-7 shrink-0 items-center justify-center rounded-lg border-2 transition-all",
 										selectedStyle === style.id
 											? "border-primary bg-primary"
 											: "border-primary bg-transparent"
@@ -289,7 +289,7 @@ const SmileStyleStepComponent = forwardRef<
 								>
 									{selectedStyle === style.id && (
 										<svg
-											className="size-4 text-primary-foreground"
+											className="size-4 text-white"
 											fill="none"
 											stroke="currentColor"
 											viewBox="0 0 24 24"
