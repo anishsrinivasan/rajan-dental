@@ -124,7 +124,7 @@ export function ImagePreviewStep({
         <div className="flex items-start gap-3">
           <Checkbox
             checked={isChecked}
-            className="mt-0.5 rounded-md border border-border bg-background p-3"
+            className="mt-0.5 size-5 rounded-md border border-primary p-3 data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
             id="consent"
             onCheckedChange={(checked) => {
               const value = checked === true;
