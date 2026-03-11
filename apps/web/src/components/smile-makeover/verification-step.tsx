@@ -2,14 +2,10 @@
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import type { VerificationStepProps } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import googleLogo from "../../assets/google-logo.png";
 import verifyLogo from "../../assets/verify.png";
-
-interface VerificationStepProps {
-	className?: string;
-	onGoogleVerify: () => void;
-}
 
 export function VerificationStep({
 	onGoogleVerify,
@@ -32,7 +28,11 @@ export function VerificationStep({
 				</p>
 			</div>
 
-			<Button className="w-72 gap-3 rounded-2xl" size="lg" variant="outline">
+			<Button
+				className="w-72 gap-3 rounded-2xl border border-[#C1C1C1]"
+				size="lg"
+				variant="outline"
+			>
 				<Image alt="" src={googleLogo} />
 				Continue with Google
 			</Button>

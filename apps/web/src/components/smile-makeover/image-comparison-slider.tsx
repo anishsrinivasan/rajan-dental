@@ -3,13 +3,8 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import type { ImageComparisonSliderProps } from "@/lib/types";
 import { cn } from "@/lib/utils";
-
-interface ImageComparisonSliderProps {
-	afterImage: string;
-	beforeImage: string;
-	className?: string;
-}
 
 export function ImageComparisonSlider({
 	beforeImage,

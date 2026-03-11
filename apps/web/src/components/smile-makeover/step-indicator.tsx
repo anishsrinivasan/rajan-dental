@@ -1,10 +1,5 @@
+import type { StepIndicatorProps } from "@/lib/types";
 import { cn } from "@/lib/utils";
-
-interface StepIndicatorProps {
-	className?: string;
-	currentStep: number;
-	totalSteps: number;
-}
 
 export function StepIndicator({
 	currentStep,

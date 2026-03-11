@@ -1,12 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import type { VerificationSuccessStepProps } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import successLogo from "../../assets/success.png";
-
-interface VerificationSuccessStepProps {
-	className?: string;
-}
 
 export function VerificationSuccessStep({
 	className,

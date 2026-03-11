@@ -6,20 +6,12 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
+import type { ImagePreviewStepProps } from "@/lib/types";
 import { cn } from "@/lib/utils";
-
-interface ImagePreviewStepProps {
-	className?: string;
-	imageUrl: string;
-	onConfirm: () => void;
-	onImageChange: (file: File) => void;
-	onRemove: () => void;
-}
 
 export function ImagePreviewStep({
 	imageUrl,
 	onRemove,
-	onConfirm,
 	onImageChange,
 	className,
 }: ImagePreviewStepProps) {
