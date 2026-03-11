@@ -17,6 +17,7 @@ export function SmileMakeoverFlow() {
   const [currentStep, setCurrentStep] = useState<Step>("upload");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedStyle, setSelectedStyle] = useState<string | null>(null);
+  const [isConsentChecked, setIsConsentChecked] = useState(true);
   const [isStyleStepLoading, setIsStyleStepLoading] = useState<boolean>(true);
   const smileStyleStepRef = useRef<SmileStyleStepRef>(null);
 
@@ -40,6 +41,7 @@ export function SmileMakeoverFlow() {
       URL.revokeObjectURL(selectedImage);
     }
     setSelectedImage(null);
+    setIsConsentChecked(true);
     setCurrentStep("upload");
   };
 
@@ -130,6 +132,7 @@ export function SmileMakeoverFlow() {
                 <ImagePreviewStep
                   imageUrl={selectedImage}
                   onConfirm={handleImageConfirm}
+                  onConsentChange={setIsConsentChecked}
                   onImageChange={handleImageChange}
                   onRemove={handleImageRemove}
                 />
@@ -169,6 +172,7 @@ export function SmileMakeoverFlow() {
                 className="w-full cursor-pointer rounded-full bg-primary font-semibold text-[16px]"
                 disabled={
                   (currentStep === "upload" && !selectedImage) ||
+                  (currentStep === "preview" && !isConsentChecked) ||
                   (currentStep === "style-selection" && isStyleStepLoading)
                 }
                 onClick={handleNext}

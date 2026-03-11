@@ -4,7 +4,6 @@ import confetti from "canvas-confetti";
 import { Loader2 } from "lucide-react";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import type {
   SmileStyle,
   SmileStyleStepProps,

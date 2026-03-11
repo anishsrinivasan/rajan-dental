@@ -10,6 +10,7 @@ export interface ImagePreviewStepProps {
 	className?: string;
 	imageUrl: string;
 	onConfirm: () => void;
+	onConsentChange?: (checked: boolean) => void;
 	onImageChange: (file: File) => void;
 	onRemove: () => void;
 }
