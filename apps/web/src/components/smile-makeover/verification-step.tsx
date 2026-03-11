@@ -29,7 +29,7 @@ export function VerificationStep({
       </div>
 
       <Button
-        className="w-72 gap-3 rounded-2xl border border-border bg-background"
+        className="w-72 gap-3 rounded-2xl border border-google-button-border bg-background"
         size="lg"
         variant="outline"
       >

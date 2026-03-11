@@ -20,6 +20,7 @@
 	--destructive: oklch(0.4437 0.1613 26.8994);
 	--destructive-foreground: oklch(1 0 0);
 	--border: oklch(0.8866 0.0404 89.6994);
+	--google-button-border: #c1c1c1;
 	--input: oklch(0.8866 0.0404 89.6994);
 	--ring: oklch(0.5553 0.1455 48.9975);
 	--chart-1: oklch(0.5553 0.1455 48.9975);
@@ -85,6 +86,7 @@
 	--destructive: oklch(0.9851 0 0);
 	--destructive-foreground: oklch(1 0 0);
 	--border: oklch(0.9851 0 0);
+	--google-button-border: #c1c1c1;
 	--input: oklch(0.9851 0 0);
 	--ring: oklch(0.9851 0 0);
 	--chart-1: oklch(0.7049 0.1867 47.6044);
@@ -143,6 +145,7 @@
 	--color-destructive: var(--destructive);
 	--color-destructive-foreground: var(--destructive-foreground);
 	--color-border: var(--border);
+	--color-google-button-border: var(--google-button-border);
 	--color-input: var(--input);
 	--color-ring: var(--ring);
 	--color-chart-1: var(--chart-1);
