@@ -179,7 +179,6 @@ const SmileStyleStepComponent = forwardRef<
     handleDownload,
   ]);
 
-  // Show loading screen while generating
   if (isGenerating) {
     return (
       <div className={cn("flex flex-col gap-6", className)}>
