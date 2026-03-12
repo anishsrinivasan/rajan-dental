@@ -96,10 +96,10 @@ export function SmileMakeoverFlow() {
   };
 
   return (
-    <div className="flex h-screen flex-col overflow-y-auto bg-background">
+    <div className="flex h-screen flex-col bg-background">
       {/* Main Content */}
       <main className="flex flex-1 flex-col">
-        <div className="mx-auto flex min-h-screen w-full max-w-md flex-col">
+        <div className="mx-auto flex min-h-screen w-full overflow-y-scroll max-w-md flex-col">
           {/* Header */}
           <div className="shrink-0 px-4 pt-3 pb-1">
             <div className="mb-1">
