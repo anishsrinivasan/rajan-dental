@@ -216,13 +216,13 @@ const SmileStyleStepComponent = forwardRef<
   return (
     <div
       className={cn(
-        "flex min-h-0 flex-1 flex-col gap-1 overflow-hidden",
+        "flex min-h-0 flex-1 flex-col gap-1 overflow-auto",
         className,
       )}
     >
       {/* Image Comparison - max height on mobile to reduce overall screen height */}
       {currentImage ? (
-        <div className="relative shrink-0 overflow-hidden rounded-2xl">
+        <div className="relative shrink-0 overflow-auto rounded-2xl">
           <ImageComparisonSlider
             afterImage={currentImage}
             beforeImage={imageUrl}
