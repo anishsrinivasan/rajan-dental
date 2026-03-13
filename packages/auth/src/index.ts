@@ -1,4 +1,5 @@
 import { db } from "@my-better-t-app/db";
+// biome-ignore lint/performance/noNamespaceImport: Schema namespace is required for Drizzle configuration
 import * as schema from "@my-better-t-app/db/schema/auth";
 import { env } from "@my-better-t-app/env/server";
 import { betterAuth } from "better-auth";

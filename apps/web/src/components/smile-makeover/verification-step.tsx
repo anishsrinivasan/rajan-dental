@@ -8,35 +8,36 @@ import googleLogo from "../../assets/google-logo.png";
 import verifyLogo from "../../assets/verify.png";
 
 export function VerificationStep({
-  onGoogleVerify,
-  className,
+	onGoogleVerify,
+	className,
 }: VerificationStepProps) {
-  return (
-    <div
-      className={cn("mt-16 flex flex-col items-center gap-8 py-2", className)}
-    >
-      <div className="flex items-center justify-center rounded-full">
-        <Image alt="" src={verifyLogo} />
-      </div>
+	return (
+		<div
+			className={cn("mt-16 flex flex-col items-center gap-8 py-2", className)}
+		>
+			<div className="flex items-center justify-center rounded-full">
+				<Image alt="" src={verifyLogo} />
+			</div>
 
-      <div className="text-center">
-        <h3 className="font-semibold text-foreground text-lg">
-          Let’s Verify You
-        </h3>
-        <p className="mt-2 text-muted-foreground text-sm">
-          We verify accounts to protect your <br /> photos and prevent misuse.
-        </p>
-      </div>
+			<div className="text-center">
+				<h3 className="font-semibold text-foreground text-lg">
+					Let’s Verify You
+				</h3>
+				<p className="mt-2 text-muted-foreground text-sm">
+					We verify accounts to protect your <br /> photos and prevent misuse.
+				</p>
+			</div>
 
-      <Button
-        className="w-72 gap-3 rounded-2xl bg-background"
-        size="lg"
-        style={{ border: "1px solid #C1C1C1" }}
-        variant="outline"
-      >
-        <Image alt="" src={googleLogo} />
-        Continue with Google
-      </Button>
-    </div>
-  );
+			<Button
+				className="w-72 gap-3 rounded-2xl bg-background"
+				onClick={onGoogleVerify}
+				size="lg"
+				style={{ border: "1px solid #C1C1C1" }}
+				variant="outline"
+			>
+				<Image alt="" src={googleLogo} />
+				Continue with Google
+			</Button>
+		</div>
+	);
 }

@@ -2,6 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import { type NextRequest, NextResponse } from "next/server";
 
 const MODEL_NAME = "gemini-2.5-flash-image";
+const DATA_URI_PREFIX_REGEX = /^data:image\/(png|jpeg|jpg|webp);base64,/;
 
 export const SMILE_STYLES = [
 	{
@@ -40,10 +41,7 @@ const generateSmileMakeover = async (
 	styleConfig: (typeof SMILE_STYLES)[0]
 ): Promise<string> => {
 	try {
-		const cleanBase64 = base64Image.replace(
-			/^data:image\/(png|jpeg|jpg|webp);base64,/,
-			""
-		);
+		const cleanBase64 = base64Image.replace(DATA_URI_PREFIX_REGEX, "");
 
 		const response = await ai.models.generateContent({
 			model: MODEL_NAME,
@@ -91,11 +89,11 @@ const generateAllStyles = async (
 
 	const results = await Promise.all(promises);
 	const resultMap: Record<string, string> = {};
-	results.forEach((r) => {
-		if (r.image) {
-			resultMap[r.id] = r.image;
+	for (const result of results) {
+		if (result.image) {
+			resultMap[result.id] = result.image;
 		}
-	});
+	}
 
 	return resultMap;
 };
@@ -133,11 +131,11 @@ export async function POST(request: NextRequest) {
 			const allImages = await generateAllStyles(ai, imageBase64);
 			const errors: string[] = [];
 
-			SMILE_STYLES.forEach((style) => {
-				if (!allImages[style.id]) {
-					errors.push(`Failed to generate ${style.name}`);
+			for (const styleConfig of SMILE_STYLES) {
+				if (!allImages[styleConfig.id]) {
+					errors.push(`Failed to generate ${styleConfig.name}`);
 				}
-			});
+			}
 
 			return NextResponse.json({
 				success: true,

@@ -20,9 +20,9 @@ import {
 
 import { Button } from "@/components/ui/button";
 
-type Api = {
+interface Api {
 	fire: (options?: ConfettiOptions) => void;
-};
+}
 
 type Props = React.ComponentPropsWithRef<"canvas"> & {
 	options?: ConfettiOptions;

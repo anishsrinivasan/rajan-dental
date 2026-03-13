@@ -26,6 +26,8 @@
     "db:migrate": "turbo -F @my-better-t-app/db db:migrate",
     "check": "ultracite check",
     "fix": "ultracite fix",
+    "lint": "ultracite check",
+    "format": "ultracite fix",
     "prepare": "husky"
   },
   "dependencies": {

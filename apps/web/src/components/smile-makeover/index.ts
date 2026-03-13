@@ -1,3 +1,4 @@
+// biome-ignore lint/performance/noBarrelFile: Consolidated exports for smile makeover components
 export { ImageComparisonSlider } from "./image-comparison-slider";
 export { ImagePreviewStep } from "./image-preview-step";
 export { ImageUploadStep } from "./image-upload-step";
