@@ -11,7 +11,6 @@ import { ImagePreviewStep } from "./image-preview-step";
 import { ImageUploadStep } from "./image-upload-step";
 import { SmileStyleStep } from "./smile-style-step";
 import { StepIndicator } from "./step-indicator";
-import { VerificationStep } from "./verification-step";
 
 export function SmileMakeoverFlow() {
   const [currentStep, setCurrentStep] = useState<Step>("upload");
@@ -21,7 +20,7 @@ export function SmileMakeoverFlow() {
   const [isStyleStepLoading, setIsStyleStepLoading] = useState<boolean>(true);
   const smileStyleStepRef = useRef<SmileStyleStepRef>(null);
 
-  const steps: Step[] = ["upload", "preview", "verify", "style-selection"];
+  const steps: Step[] = ["upload", "preview", "style-selection"];
   const currentStepIndex = steps.indexOf(currentStep);
 
   useEffect(() => {
@@ -54,11 +53,6 @@ export function SmileMakeoverFlow() {
   };
 
   const handleImageConfirm = () => {
-    setCurrentStep("verify");
-  };
-
-  const handleGoogleVerify = () => {
-    setIsStyleStepLoading(true);
     setCurrentStep("style-selection");
   };
 
@@ -77,9 +71,6 @@ export function SmileMakeoverFlow() {
         break;
       case "style-selection":
         handleBookConsultation();
-        break;
-      case "verify":
-        handleGoogleVerify();
         break;
     }
   };
@@ -136,9 +127,6 @@ export function SmileMakeoverFlow() {
                   onImageChange={handleImageChange}
                   onRemove={handleImageRemove}
                 />
-              )}
-              {currentStep === "verify" && (
-                <VerificationStep onGoogleVerify={handleGoogleVerify} />
               )}
               {currentStep === "style-selection" && selectedImage && (
                 <SmileStyleStep
