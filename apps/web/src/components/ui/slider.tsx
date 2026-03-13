@@ -1,0 +1,46 @@
+import type { ChangeEvent, InputHTMLAttributes } from "react";
+import { forwardRef } from "react";
+import { cn } from "@/lib/utils";
+
+interface SliderProps
+	extends Omit<InputHTMLAttributes<HTMLInputElement>, "type"> {
+	max?: number;
+	min?: number;
+	onValueChange?: (value: number) => void;
+	step?: number;
+	value?: number;
+}
+
+const Slider = forwardRef<HTMLInputElement, SliderProps>(
+	(
+		{ className, min = 0, max = 100, step = 1, value, onValueChange, ...props },
+		ref
+	) => {
+		const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+			onValueChange?.(Number(e.target.value));
+		};
+
+		return (
+			<input
+				className={cn(
+					"h-2 w-full cursor-pointer appearance-none rounded-full bg-muted outline-none transition-opacity hover:opacity-100 disabled:cursor-not-allowed disabled:opacity-50",
+					"[&::-webkit-slider-thumb]:size-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:transition-all [&::-webkit-slider-thumb]:hover:scale-110",
+					"[&::-moz-range-thumb]:size-5 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-primary [&::-moz-range-thumb]:transition-all [&::-moz-range-thumb]:hover:scale-110",
+					className
+				)}
+				max={max}
+				min={min}
+				onChange={handleChange}
+				ref={ref}
+				step={step}
+				type="range"
+				value={value}
+				{...props}
+			/>
+		);
+	}
+);
+
+Slider.displayName = "Slider";
+
+export { Slider };

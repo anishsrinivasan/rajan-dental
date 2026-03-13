@@ -26,11 +26,14 @@
     "db:migrate": "turbo -F @my-better-t-app/db db:migrate",
     "check": "ultracite check",
     "fix": "ultracite fix",
+    "lint": "ultracite check",
+    "format": "ultracite fix",
     "prepare": "husky"
   },
   "dependencies": {
     "@my-better-t-app/env": "workspace:*",
     "dotenv": "catalog:",
+    "lucide": "^0.577.0",
     "zod": "catalog:"
   },
   "devDependencies": {
